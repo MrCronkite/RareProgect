@@ -1,0 +1,6 @@
+framework module Pods_RareStones {
+  umbrella header "Pods-RareStones-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -7,8 +7,11 @@
 
 import UIKit
 import MessageUI
+import GoogleMobileAds
 
 final class SettingsViewController: UIViewController {
+    
+    var adBannerView: GADBannerView!
     
     @IBOutlet weak var inviteTxt: UILabel!
     @IBOutlet weak var privacyTxt: UILabel!
@@ -22,6 +25,7 @@ final class SettingsViewController: UIViewController {
     @IBOutlet weak var termView: UIView!
     @IBOutlet weak var supportVIew: UIView!
     
+    @IBOutlet weak var boxAdView: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -50,6 +54,12 @@ final class SettingsViewController: UIViewController {
         let tapSupport = UITapGestureRecognizer(target: self, action: #selector(support(_:)))
         supportVIew.addGestureRecognizer(tapSupport)
         supportVIew.isUserInteractionEnabled = true
+        
+        adBannerView = GADBannerView(adSize: GADAdSizeBanner)
+        addBannerViewToView(adBannerView)
+        adBannerView.adUnitID = R.Strings.KeyAd.bannerAdKey
+        adBannerView.rootViewController = self
+        adBannerView.load(GADRequest())
     }
     
     override func viewWillLayoutSubviews() {
@@ -130,6 +140,27 @@ final class SettingsViewController: UIViewController {
             })
         }
     }
+    
+    private func addBannerViewToView(_ adbannerView: GADBannerView) {
+        adbannerView.translatesAutoresizingMaskIntoConstraints = false
+        boxAdView.addSubview(adbannerView)
+        boxAdView.addConstraints(
+          [NSLayoutConstraint(item: adbannerView,
+                              attribute: .centerY,
+                              relatedBy: .equal,
+                              toItem: boxAdView,
+                              attribute: .centerY,
+                              multiplier: 1,
+                              constant: 0 ),
+           NSLayoutConstraint(item: adbannerView,
+                              attribute: .centerX,
+                              relatedBy: .equal,
+                              toItem: boxAdView,
+                              attribute: .centerX,
+                              multiplier: 1,
+                              constant: 0)
+          ])
+       }
 }
 
 extension SettingsViewController: MFMailComposeViewControllerDelegate {

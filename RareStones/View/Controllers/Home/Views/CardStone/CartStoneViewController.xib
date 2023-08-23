@@ -11,7 +11,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CartStoneViewController" customModule="RareStones" customModuleProvider="target">
             <connections>
+                <outlet property="articleTableView" destination="qfT-Yy-VwM" id="924-fA-dtP"/>
                 <outlet property="borderImg" destination="s2q-eK-x30" id="eXO-Ag-tSe"/>
+                <outlet property="bottomConstraint" destination="YBn-6d-ugJ" id="0gW-qA-d4I"/>
                 <outlet property="boxImg" destination="dqg-Ni-6q2" id="Pa1-Rm-GVS"/>
                 <outlet property="btnHeart" destination="Ptd-wU-7Ov" id="DTZ-Ky-2D2"/>
                 <outlet property="btnSeeAll" destination="tmm-gr-EOJ" id="XPc-T8-ccr"/>
@@ -27,6 +29,7 @@
                 <outlet property="otherView" destination="jdE-mK-0LZ" id="KPa-Iv-3hG"/>
                 <outlet property="rareTeg" destination="TPE-fT-XsS" id="zvM-NA-boh"/>
                 <outlet property="stoneImgView" destination="r8C-U5-cYs" id="8Ne-pP-VfD"/>
+                <outlet property="titleArticle" destination="sWe-Wi-kya" id="jZM-e3-BLE"/>
                 <outlet property="view" destination="iN0-l3-epB" id="mNR-om-gep"/>
             </connections>
         </placeholder>
@@ -39,7 +42,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Ny-PG-WiW">
-                            <rect key="frame" x="0.0" y="0.0" width="393" height="883"/>
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="1067"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dqg-Ni-6q2">
                                     <rect key="frame" x="25" y="60" width="343" height="299"/>
@@ -130,7 +133,7 @@
                                     </connections>
                                 </button>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jdE-mK-0LZ">
-                                    <rect key="frame" x="25" y="623" width="343" height="230"/>
+                                    <rect key="frame" x="25" y="607" width="343" height="230"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Formula" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mx3-aJ-mBY">
                                             <rect key="frame" x="16" y="15.999999999999998" width="59" height="19.333333333333329"/>
@@ -256,17 +259,38 @@
                                         <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </collectionViewFlowLayout>
                                 </collectionView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Articles about stone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sWe-Wi-kya">
+                                    <rect key="frame" x="25" y="861" width="343" height="21.666666666666629"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="343" id="6UN-ig-QDZ"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                    <color key="textColor" red="0.4240232706" green="0.38204318279999999" blue="0.48628634209999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="qfT-Yy-VwM">
+                                    <rect key="frame" x="25" y="898.66666666666663" width="343" height="152.33333333333337"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="343" id="VeP-ff-264"/>
+                                    </constraints>
+                                </tableView>
                             </subviews>
                             <constraints>
                                 <constraint firstItem="JkF-2i-KOo" firstAttribute="top" secondItem="WXU-lp-PxN" secondAttribute="bottom" constant="16" id="7OH-5z-1Ki"/>
                                 <constraint firstItem="JkF-2i-KOo" firstAttribute="centerX" secondItem="9Ny-PG-WiW" secondAttribute="centerX" id="Hr6-06-eIT"/>
                                 <constraint firstItem="WXU-lp-PxN" firstAttribute="top" secondItem="dqg-Ni-6q2" secondAttribute="bottom" constant="16" id="RcN-9F-zDX"/>
-                                <constraint firstAttribute="bottom" secondItem="jdE-mK-0LZ" secondAttribute="bottom" constant="30" id="YBn-6d-ugJ"/>
+                                <constraint firstAttribute="bottom" secondItem="jdE-mK-0LZ" secondAttribute="bottom" constant="230" id="YBn-6d-ugJ"/>
                                 <constraint firstItem="dqg-Ni-6q2" firstAttribute="top" secondItem="9Ny-PG-WiW" secondAttribute="top" constant="60" id="bOR-Ut-XeH"/>
-                                <constraint firstItem="jdE-mK-0LZ" firstAttribute="top" secondItem="JkF-2i-KOo" secondAttribute="bottom" constant="16" id="ipS-Hu-JMw"/>
+                                <constraint firstItem="qfT-Yy-VwM" firstAttribute="centerX" secondItem="9Ny-PG-WiW" secondAttribute="centerX" id="bgI-Tl-3V6"/>
+                                <constraint firstItem="sWe-Wi-kya" firstAttribute="top" secondItem="jdE-mK-0LZ" secondAttribute="bottom" constant="24" id="drB-IJ-csq"/>
+                                <constraint firstAttribute="bottom" secondItem="qfT-Yy-VwM" secondAttribute="bottom" constant="16" id="iZ0-UK-iLz"/>
+                                <constraint firstItem="jdE-mK-0LZ" firstAttribute="top" secondItem="JkF-2i-KOo" secondAttribute="bottom" id="ipS-Hu-JMw"/>
                                 <constraint firstItem="WXU-lp-PxN" firstAttribute="centerX" secondItem="9Ny-PG-WiW" secondAttribute="centerX" id="kQE-CM-7zk"/>
                                 <constraint firstItem="jdE-mK-0LZ" firstAttribute="centerX" secondItem="9Ny-PG-WiW" secondAttribute="centerX" id="lCO-Y9-ifN"/>
                                 <constraint firstItem="tmm-gr-EOJ" firstAttribute="top" secondItem="dqg-Ni-6q2" secondAttribute="bottom" constant="22" id="raI-cD-ZK0"/>
+                                <constraint firstItem="sWe-Wi-kya" firstAttribute="centerX" secondItem="9Ny-PG-WiW" secondAttribute="centerX" id="v72-tS-vZ6"/>
+                                <constraint firstItem="qfT-Yy-VwM" firstAttribute="top" secondItem="sWe-Wi-kya" secondAttribute="bottom" constant="16" id="vi2-Y8-kpS"/>
                                 <constraint firstItem="tmm-gr-EOJ" firstAttribute="centerX" secondItem="9Ny-PG-WiW" secondAttribute="centerX" constant="131" id="z6w-dR-2Vv"/>
                                 <constraint firstItem="dqg-Ni-6q2" firstAttribute="centerX" secondItem="9Ny-PG-WiW" secondAttribute="centerX" id="zBu-pK-AT2"/>
                             </constraints>

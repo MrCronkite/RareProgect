@@ -16,7 +16,7 @@ final class NetworkChatImpl: NetworkChat {
     private enum API {
         static let chat = "https://my-stone-collection.com/api/chats/"
         static let history = "https://my-stone-collection.com/api/classification/history/"
-        static let token = "07e540b06bd3752865d6a10fe6123fc3403c5831"
+        static let token = UserDefaults.standard.string(forKey: R.Strings.KeyUserDefaults.token)!
     }
     
     private let urlSession: URLSession

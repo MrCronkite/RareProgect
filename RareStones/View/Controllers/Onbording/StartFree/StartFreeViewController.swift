@@ -7,12 +7,15 @@
 
 import UIKit
 import Lottie
+import GoogleMobileAds
 
 protocol StartFreeViewControllerDelegate: AnyObject {
     func showButton()
 }
 
 final class StartFreeViewController: UIViewController {
+    
+    private var rewardedInterstitialAd: GADRewardedInterstitialAd?
     
     @IBOutlet weak var privatePolTxt: UILabel!
     @IBOutlet weak var restoreTxt: UILabel!
@@ -48,6 +51,10 @@ final class StartFreeViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        loadAd()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         UIView.animate(withDuration: 0.7) {
             self.btnSetFree.backgroundColor = .clear
@@ -60,10 +67,18 @@ final class StartFreeViewController: UIViewController {
         view.setupLayer()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        animationView.stop()
+    }
+    
     @objc func goSkip() {
-        let vc = TabBarController()
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: true)
+        self.rewardedInterstitialAd?.present(fromRootViewController: self) {
+            _ = self.rewardedInterstitialAd?.adReward
+        }
+    }
+    
+    
+    @IBAction func getOffer(_ sender: Any) {
     }
 }
 
@@ -75,10 +90,10 @@ extension StartFreeViewController {
         btnSetFree.layer.cornerRadius = 25
         
         let text = "Open up limitless possibilities"
-                let attributeText = NSMutableAttributedString(string: text)
-                
+        let attributeText = NSMutableAttributedString(string: text)
+        
         attributeText.addAttribute(.foregroundColor, value: UIColor(hexString: "#4C4752"), range: NSRange(location: 0, length: 7))
-                
+        
         subtitleText.attributedText = attributeText
     }
     
@@ -105,5 +120,35 @@ extension StartFreeViewController {
         animationView.animationSpeed = 1
         viewAnime.addSubview(animationView)
         animationView.play()
+    }
+    
+    private func loadAd() {
+        GADRewardedInterstitialAd.load(withAdUnitID:"ca-app-pub-3940256099942544/6978759866",
+                                       request: GADRequest()) { ad, error in
+            if let error = error {
+                return print("Failed to load rewarded interstitial ad with error: \(error.localizedDescription)")
+            }
+            
+            self.rewardedInterstitialAd = ad
+            let options = GADServerSideVerificationOptions()
+            options.customRewardString = "SAMPLE_CUSTOM_DATA_STRING"
+            self.rewardedInterstitialAd!.serverSideVerificationOptions = options
+            self.rewardedInterstitialAd?.fullScreenContentDelegate = self
+        }
+    }
+}
+
+extension StartFreeViewController: GADFullScreenContentDelegate {
+    func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
+        print("Ad did fail to present full screen content.")
+    }
+    
+    func adWillPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        print("Ad will present full screen content.")
+    }
+    
+    func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        print("Ad did dismiss full screen content.")
+        dismiss(animated: true)
     }
 }

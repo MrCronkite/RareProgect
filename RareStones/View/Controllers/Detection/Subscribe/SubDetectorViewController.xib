@@ -14,6 +14,7 @@
                 <outlet property="btnSub" destination="gVK-jM-Ey8" id="BGW-cJ-vFb"/>
                 <outlet property="btnWatch" destination="dED-bL-orc" id="26L-Jk-YSn"/>
                 <outlet property="imgViewBg" destination="XFG-2q-wMN" id="8yA-Pd-hst"/>
+                <outlet property="separator" destination="44X-mV-vvl" id="F3q-r5-Ypn"/>
                 <outlet property="view" destination="iN0-l3-epB" id="BsK-7y-ZiU"/>
             </connections>
         </placeholder>
@@ -44,7 +45,7 @@
                     </constraints>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kof-Ob-FxY">
-                    <rect key="frame" x="362" y="24" width="36" height="36"/>
+                    <rect key="frame" x="362" y="36" width="36" height="36"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="36" id="IF0-il-H6W"/>
                         <constraint firstAttribute="height" constant="36" id="exq-21-IC2"/>
@@ -122,7 +123,7 @@
                 <constraint firstItem="XFG-2q-wMN" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Fke-CW-1VA"/>
                 <constraint firstItem="gVK-jM-Ey8" firstAttribute="top" secondItem="dED-bL-orc" secondAttribute="bottom" constant="10" id="Suq-Mv-jjR"/>
                 <constraint firstItem="dED-bL-orc" firstAttribute="top" secondItem="QUf-rt-vGv" secondAttribute="bottom" constant="50" id="ULO-RU-tRF"/>
-                <constraint firstItem="kof-Ob-FxY" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="4" id="W3a-lx-dDH"/>
+                <constraint firstItem="kof-Ob-FxY" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="W3a-lx-dDH"/>
                 <constraint firstItem="U8a-tM-a5v" firstAttribute="top" secondItem="wTm-4U-hAg" secondAttribute="bottom" constant="-20" id="aSh-h2-4eI"/>
                 <constraint firstItem="geF-YQ-Q4b" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="b2w-Bt-1TP"/>
                 <constraint firstItem="U8a-tM-a5v" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" constant="-10" id="c5F-l9-UNy"/>

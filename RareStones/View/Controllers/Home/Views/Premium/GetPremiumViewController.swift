@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import GoogleMobileAds
 
 final class GetPremiumViewController: UIViewController {
+    
+    private var interstitial: GADInterstitialAd?
     
     @IBOutlet weak var txtTile: UILabel!
     @IBOutlet weak var perWeekTile: UILabel!
@@ -31,9 +34,27 @@ final class GetPremiumViewController: UIViewController {
         let tapSkip = UITapGestureRecognizer(target: self, action: #selector(goBack))
         skipTxt.addGestureRecognizer(tapSkip)
         skipTxt.isUserInteractionEnabled = true
+        
+        let request = GADRequest()
+        GADInterstitialAd.load(withAdUnitID: "ca-app-pub-3940256099942544/4411468910",
+                               request: request,
+                               completionHandler: { [self] ad, error in
+            if let error = error {
+                print("Failed to load interstitial ad with error: \(error.localizedDescription)")
+                return
+            }
+            interstitial = ad
+            interstitial?.fullScreenContentDelegate = self
+        }
+        )
     }
     
     @IBAction func getOffer(_ sender: Any) {
+        if interstitial != nil {
+            interstitial?.present(fromRootViewController: self)
+          } else {
+            print("Ad wasn't ready")
+          }
     }
     
     @objc func goBack() {
@@ -64,4 +85,20 @@ extension GetPremiumViewController {
         
         return formatter.string(from: interval) ?? "00:00:00"
     }
+}
+
+extension GetPremiumViewController: GADFullScreenContentDelegate {
+    func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
+        print("Ad did fail to present full screen content.")
+      }
+
+      /// Tells the delegate that the ad will present full screen content.
+      func adWillPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        print("Ad will present full screen content.")
+      }
+
+      /// Tells the delegate that the ad dismissed full screen content.
+      func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        print("Ad did dismiss full screen content.")
+      }
 }

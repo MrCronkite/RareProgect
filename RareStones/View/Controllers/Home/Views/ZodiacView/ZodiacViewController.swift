@@ -6,14 +6,16 @@
 //
 
 import UIKit
+import Lottie
 
 final class ZodiacViewController: UIViewController {
     
     var zodiacCategory: [Results] = []
     var zodiacStones: [StoneElement] = []
-    
     let networkService = NetworkServicesZodiacImpl()
+    let buttonViewAnimate = ButtonView()
     
+    @IBOutlet weak var viewButton: UIView!
     @IBOutlet weak var heightBoxView: NSLayoutConstraint!
     
     @IBOutlet weak var dataBirdtext: UILabel!
@@ -36,6 +38,7 @@ final class ZodiacViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         setupView()
         view.setupLayer()
+        boxZodiac.setupGradient()
     }
     
     @IBAction func goToBack(_ sender: Any) {
@@ -107,6 +110,14 @@ extension ZodiacViewController {
         boxZodiac.layer.borderWidth = 1
         boxZodiac.layer.borderColor = UIColor.white.cgColor
         imageZodiac.contentMode = .scaleAspectFill
+        
+        viewButton.layer.cornerRadius = 25
+        viewButton.backgroundColor = .clear
+        
+        buttonViewAnimate.delegate = self
+        viewButton.frame = buttonViewAnimate.frame
+        buttonViewAnimate.setupAnimation()
+        viewButton.addSubview(buttonViewAnimate)
     }
 }
 
@@ -144,6 +155,14 @@ extension ZodiacViewController: CartArticleDelegate {
     func sendDataStone(idStone: Int) {
         let vc = CartStoneViewController()
         vc.id = idStone
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true)
+    }
+}
+
+extension ZodiacViewController: ButtonViewDelegate {
+    func showCamera() {
+        let vc = CameraViewController()
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true)
     }

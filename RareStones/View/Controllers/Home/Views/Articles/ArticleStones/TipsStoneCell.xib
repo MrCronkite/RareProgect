@@ -10,7 +10,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TipsStoneCell" customModule="RareStones" customModuleProvider="target">
             <connections>
-                <outlet property="showBtn" destination="6DY-Cb-uxR" id="bQD-95-ZWD"/>
                 <outlet property="text" destination="fgJ-G8-pT2" id="46C-uu-hIR"/>
                 <outlet property="titleCell" destination="blN-eb-Bom" id="QfP-up-ZvQ"/>
             </connections>
@@ -26,23 +25,8 @@
                     <color key="textColor" red="0.44758415219999997" green="0.40146547560000001" blue="0.51373815540000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6DY-Cb-uxR">
-                    <rect key="frame" x="225" y="10" width="98" height="21"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="21" id="SaQ-cj-bfo"/>
-                        <constraint firstAttribute="width" constant="98" id="ypE-AP-jzG"/>
-                    </constraints>
-                    <color key="tintColor" red="0.46385723350000002" green="0.55601298809999999" blue="0.88631016019999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                    <state key="normal" title="Button"/>
-                    <buttonConfiguration key="configuration" style="plain" title="See more">
-                        <fontDescription key="titleFontDescription" type="system" pointSize="13"/>
-                    </buttonConfiguration>
-                    <connections>
-                        <action selector="showText:" destination="-1" eventType="touchUpInside" id="vHX-VE-iLw"/>
-                    </connections>
-                </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fgJ-G8-pT2">
-                    <rect key="frame" x="0.0" y="41" width="311" height="85"/>
+                    <rect key="frame" x="0.0" y="31" width="311" height="95"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <color key="textColor" red="0.44758415219999997" green="0.40146547560000001" blue="0.51373815540000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <nil key="highlightedColor"/>
@@ -54,10 +38,8 @@
                 <constraint firstItem="blN-eb-Bom" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="EhT-Rk-FSN"/>
                 <constraint firstAttribute="bottom" secondItem="fgJ-G8-pT2" secondAttribute="bottom" id="F90-Qg-4fA"/>
                 <constraint firstItem="blN-eb-Bom" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="H04-uh-oM4"/>
-                <constraint firstItem="6DY-Cb-uxR" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="Jl8-RC-xHU"/>
                 <constraint firstItem="fgJ-G8-pT2" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="VTN-1X-zxR"/>
-                <constraint firstAttribute="trailing" secondItem="6DY-Cb-uxR" secondAttribute="trailing" constant="-12" id="h0s-an-ACi"/>
-                <constraint firstItem="fgJ-G8-pT2" firstAttribute="top" secondItem="blN-eb-Bom" secondAttribute="bottom" constant="10" id="iFL-hd-fib"/>
+                <constraint firstItem="fgJ-G8-pT2" firstAttribute="top" secondItem="blN-eb-Bom" secondAttribute="bottom" id="iFL-hd-fib"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="110.68702290076335" y="-238.73239436619718"/>

@@ -42,7 +42,7 @@ struct RockID: Decodable {
     let userCollection: JSONNull?
     let isFavorite: Bool
     let zodiacs: [ZodiacElement]
-    let articles: [JSONAny]
+    let articles: [Other?]
     let chemicalFormula, colors, description, hardness: String
     let healthRisks: String? 
     let name: String

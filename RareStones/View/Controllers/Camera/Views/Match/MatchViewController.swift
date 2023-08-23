@@ -11,13 +11,18 @@ final class MatchViewController: UIViewController {
     
     var matchStones: StonePhoto? = nil
     var otherStones: [StoneClassificationResultModel] = []
+    var alertController: UIAlertController?
     
     @IBOutlet weak var boxImgView: UIView!
     @IBOutlet weak var imgView: UIImageView!
     @IBOutlet weak var percentBox: UIView!
-    @IBOutlet weak var cartStone: CartStone!
     @IBOutlet weak var percentTxt: UILabel!
     @IBOutlet weak var collectionOther: UICollectionView!
+    
+    @IBOutlet weak var containerStoneView: UIView!
+    @IBOutlet weak var imageStoneView: UIImageView!
+    @IBOutlet weak var lableStone: UILabel!
+    @IBOutlet weak var priceStone: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,15 +30,17 @@ final class MatchViewController: UIViewController {
         setupView()
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(togle(_ :)))
-        cartStone.addGestureRecognizer(tap)
-        cartStone.isUserInteractionEnabled = true
+        containerStoneView.addGestureRecognizer(tap)
+        containerStoneView.isUserInteractionEnabled = true
     }
     
     override func viewDidLayoutSubviews() {
         view.setupLayer()
+        print(containerStoneView.frame.height)
     }
     
     @IBAction func goToBack(_ sender: Any) {
+        showRating()
         dismiss(animated: true)
     }
     
@@ -43,10 +50,18 @@ final class MatchViewController: UIViewController {
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true)
     }
+    
+    @objc func starButtonTapped(_ sender: UIButton) {
+//        if let appURL = URL(string: "itms-apps://itunes.apple.com/app/ВАШ_ID_ПРИЛОЖЕНИЯ?mt=8&action=write-review") {
+//                    UIApplication.shared.open(appURL, options: [:], completionHandler: nil)
+//                }
+
+        dismiss(animated: true)
+    }
 }
 
 extension MatchViewController{
-     func setupView() {
+    func setupView() {
         boxImgView.layer.cornerRadius = 20
         imgView.contentMode = .scaleAspectFill
         imgView.clipsToBounds = true
@@ -64,17 +79,58 @@ extension MatchViewController{
         
         collectionOther.dataSource = self
         collectionOther.register(MatchCell.self, forCellWithReuseIdentifier: "MatchCell")
+        
+        imageStoneView.clipsToBounds = true
+        imageStoneView.layer.cornerRadius = 12
+        imageStoneView.contentMode = .scaleAspectFill
+        containerStoneView.layer.cornerRadius = 16
+    
+        containerStoneView.layer.shadowColor = UIColor.black.cgColor
+        containerStoneView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        containerStoneView.layer.shadowOpacity = 0.3
+        containerStoneView.layer.shadowRadius = 4
     }
     
     private func setupViewData() {
         guard let data = matchStones else { return }
         imgView.setupImgURL(url: data.image)
-        cartStone.imageStone.setupImgURL(url: data.results[0].stone.image)
-        cartStone.btnHeart.isHidden = true
-        cartStone.titleStone.text = data.results[0].stone.name
-        cartStone.priceStone.text = "\(data.results[0].stone.pricePerCaratTo ?? "$0") / crt"
+        imageStoneView.setupImgURL(url: data.results[0].stone.image)
+        lableStone.text = data.results[0].stone.name
+        priceStone.text = "\(data.results[0].stone.pricePerCaratTo?.remove$() ?? "$0") / crt"
         otherStones = data.results
         collectionOther.reloadData()
+    }
+    
+    private func showRating() {
+        alertController = UIAlertController(title: "Rate the App", message: "Please rate our app", preferredStyle: .alert)
+        
+        let starStackView = UIStackView()
+        starStackView.translatesAutoresizingMaskIntoConstraints = false
+        starStackView.axis = .horizontal
+        starStackView.alignment = .center
+        starStackView.spacing = 10
+        
+        for _ in 1...5 {
+            let starButton = UIButton(type: .custom)
+            starButton.setImage(UIImage(systemName: "star"), for: .normal)
+            starButton.setImage(UIImage(systemName: "star.fill"), for: .selected)
+            starButton.addTarget(self, action: #selector(starButtonTapped(_:)), for: .touchUpInside)
+            starButton.translatesAutoresizingMaskIntoConstraints = false
+            starButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+            starButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+            starStackView.addArrangedSubview(starButton)
+        }
+        
+        alertController?.view.addSubview(starStackView)
+        
+        let constraints = [
+            starStackView.centerXAnchor.constraint(equalTo: alertController!.view.centerXAnchor),
+            starStackView.topAnchor.constraint(equalTo: alertController!.view.topAnchor, constant: 50),
+            starStackView.bottomAnchor.constraint(equalTo: (alertController!.view.bottomAnchor), constant: 0)
+        ]
+        NSLayoutConstraint.activate(constraints)
+        
+        present(alertController!, animated: true, completion: nil)
     }
 }
 

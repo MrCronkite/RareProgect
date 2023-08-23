@@ -56,7 +56,7 @@ final class BaseViewOnbording: UIViewController {
         animationView.frame = CGRect(x: 0, y: -15, width: 360, height: 346)
         bgImgView.center = animationView.center
         animationView.loopMode = .loop
-        animationView.animationSpeed = 1
+        animationView.animationSpeed = 1.5
         bgImgView.addSubview(animationView)
     }
     

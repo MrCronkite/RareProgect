@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import GoogleMobileAds
 
 final class ArticleViewController: UIViewController {
     
@@ -15,15 +16,19 @@ final class ArticleViewController: UIViewController {
     var parts: [PartItm] = []
     var stones:  [RelatedStone] = []
     var multiplHeight = 0
+    var adBannerView: GADBannerView!
+    var heightCell: [CGFloat] = []
     
-    @IBOutlet weak var viewHeight: NSLayoutConstraint!
+    @IBOutlet weak var titleMentions: UILabel!
+    @IBOutlet weak var bottomAnchor: NSLayoutConstraint!
+    @IBOutlet weak var collectionHeight: NSLayoutConstraint!
     @IBOutlet weak var collectionArticle: UICollectionView!
     @IBOutlet weak var titleMainText: UILabel!
     @IBOutlet weak var imgView: UIImageView!
-    @IBOutlet weak var scrolView: UIScrollView!
+//    @IBOutlet weak var scrolView: UIScrollView!
     
+    @IBOutlet weak var boxAdView: UIView!
     @IBOutlet weak var collectionStones: UICollectionView!
-    @IBOutlet weak var titleArticle: UITextView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -34,7 +39,6 @@ final class ArticleViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         view.setupLayer()
-        self.viewHeight.constant = CGFloat(multiplHeight + 750)
     }
     
     @IBAction func closeVC(_ sender: Any) {
@@ -49,6 +53,11 @@ extension ArticleViewController {
         imgView.clipsToBounds = true
         imgView.layer.cornerRadius = 25
         
+        let layoutArticle = UICollectionViewFlowLayout()
+        layoutArticle.scrollDirection = .vertical
+        layoutArticle.minimumLineSpacing = 30
+        
+        collectionArticle.collectionViewLayout = layoutArticle
         collectionArticle.showsVerticalScrollIndicator = false
         collectionArticle.backgroundColor = .clear
         collectionArticle.dataSource = self
@@ -62,9 +71,14 @@ extension ArticleViewController {
         collectionStones.showsHorizontalScrollIndicator = false
         collectionStones.backgroundColor = UIColor.clear
         collectionStones.collectionViewLayout = layout
-        
         collectionStones.dataSource = self
         collectionStones.register(MatchCell.self, forCellWithReuseIdentifier: "MatchCell")
+        
+        adBannerView = GADBannerView(adSize: GADAdSizeBanner)
+        addBannerViewToView(adBannerView)
+        adBannerView.adUnitID = R.Strings.KeyAd.bannerAdKey
+        adBannerView.rootViewController = self
+        adBannerView.load(GADRequest())
     }
     
     private func getArticleById() {
@@ -75,9 +89,13 @@ extension ArticleViewController {
                 DispatchQueue.main.async {
                     self.parts = data.parts
                     self.stones = data.relatedStones
+                    if self.stones.count == 0 {
+                        self.bottomAnchor.constant = 10
+                        self.titleMentions.isHidden = true
+                        self.collectionStones.isHidden = true
+                    }
                     self.titleMainText.text = data.title
                     self.imgView.setupImgURL(url: data.thumbnail)
-                    self.titleArticle.text = data.parts[1].text
                     self.collectionArticle.reloadData()
                     self.collectionStones.reloadData()
                 }
@@ -86,9 +104,32 @@ extension ArticleViewController {
         }
     }
     
-    private func calculateHeightForItem(_ item: ArticleCellView, width: CGFloat) -> CGFloat {
-        let textHeigh = item.lableTextCell.frame.height
-        return textHeigh
+    private func addBannerViewToView(_ adbannerView: GADBannerView) {
+        adbannerView.translatesAutoresizingMaskIntoConstraints = false
+        boxAdView.addSubview(adbannerView)
+        boxAdView.addConstraints(
+          [NSLayoutConstraint(item: adbannerView,
+                              attribute: .centerY,
+                              relatedBy: .equal,
+                              toItem: boxAdView,
+                              attribute: .centerY,
+                              multiplier: 1,
+                              constant: -10 ),
+           NSLayoutConstraint(item: adbannerView,
+                              attribute: .centerX,
+                              relatedBy: .equal,
+                              toItem: boxAdView,
+                              attribute: .centerX,
+                              multiplier: 1,
+                              constant: 0)
+          ])
+       }
+    
+    private func calculateCollectionHeight() {
+        let totalCellHeights = heightCell.reduce(0, +)
+        let headerHeight = CGFloat(28 * parts.count)
+        let collectionHeight = totalCellHeights + headerHeight
+        self.collectionHeight.constant = collectionHeight
     }
 }
 
@@ -105,11 +146,22 @@ extension ArticleViewController: UICollectionViewDataSource {
         switch collectionView {
         case collectionArticle :
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(ArticleCellView.self)", for: indexPath) as? ArticleCellView else { return UICollectionViewCell() }
-            cell.txtView.text = parts[indexPath.row].text
-            cell.lableTextCell.text = parts[indexPath.row].title
-            cell.configure(with: parts[indexPath.row].title,
-                           hasImage: parts[indexPath.row].image == nil ? false : true)
-            cell.imgView.setupImgURL(url: parts[indexPath.row].image ?? "")
+            if parts[indexPath.row].image == nil && parts[indexPath.row].title != nil {
+                cell.titleConstraint.constant = 0
+                cell.lableConstraint.constant = 30
+                cell.imageViewArticle.isHidden = true
+            } else if parts[indexPath.row].title == nil && parts[indexPath.row].image == nil {
+                cell.imageViewArticle.isHidden = true
+                cell.titleArticle.isHidden = true
+                cell.lableConstraint.constant = 0
+                cell.titleConstraint.constant = 0
+            } else if parts[indexPath.row].title == nil {
+                cell.titleArticle.isHidden = true
+                cell.lableConstraint.constant = 185
+            }
+            cell.imageViewArticle.setupImgURL(url: parts[indexPath.row].image ?? "")
+            cell.textArticel.text = parts[indexPath.row].text
+            cell.titleArticle.text = parts[indexPath.row].title
             return cell
         case collectionStones :
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(MatchCell.self)", for: indexPath) as? MatchCell else { return UICollectionViewCell() }
@@ -121,7 +173,6 @@ extension ArticleViewController: UICollectionViewDataSource {
             return cell
         default: return UICollectionViewCell()
         }
-        
     }
 }
 
@@ -136,21 +187,32 @@ extension ArticleViewController: MatchCellDelegate {
 
 extension ArticleViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let text = parts[indexPath.item].text
-        let width = collectionView.frame.width
-        let boundingSize = CGSize(width: width, height: .greatestFiniteMagnitude)
-        let textHeight = text.boundingRect(with: boundingSize, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17)], context: nil).height
-        if parts[indexPath.row].image != nil {
-            multiplHeight += Int(textHeight + 200)
-            return CGSize(width: width, height: textHeight + 210)
-        }
+        let item = parts[indexPath.row]
+        let cellWidth = collectionView.frame.width
         
-        if parts[indexPath.row].title == nil {
-            multiplHeight += Int(textHeight + 0)
-            return CGSize(width: width, height: textHeight)
+        if parts[indexPath.row].image == nil && parts[indexPath.row].title != nil {
+            let height = ArticleCellView.calculateCellHeight(for: item.text, width: cellWidth) + 30
+            heightCell.append(height)
+            if parts.count == heightCell.count { calculateCollectionHeight() }
+            return CGSize(width: cellWidth, height: height)
+            
+        } else if parts[indexPath.row].title == nil && parts[indexPath.row].image == nil {
+            let height = ArticleCellView.calculateCellHeight(for: item.text, width: cellWidth)
+            heightCell.append(height)
+            if parts.count == heightCell.count { calculateCollectionHeight() }
+            return CGSize(width: cellWidth, height: height)
+            
+        } else if parts[indexPath.row].title == nil {
+            let height = ArticleCellView.calculateCellHeight(for: item.text, width: cellWidth) + 190
+            heightCell.append(height)
+            if parts.count == heightCell.count { calculateCollectionHeight() }
+            return CGSize(width: cellWidth, height: height)
+            
         } else {
-            multiplHeight += Int(textHeight + 20)
-            return CGSize(width: width, height: textHeight + 20)
+            let height = ArticleCellView.calculateCellHeight(for: item.text, width: cellWidth) + 220
+            heightCell.append(height)
+            if parts.count == heightCell.count { calculateCollectionHeight() }
+            return CGSize(width: cellWidth, height: height)
         }
     }
 }

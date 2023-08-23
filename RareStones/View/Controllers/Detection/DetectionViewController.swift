@@ -12,6 +12,8 @@ import CoreLocation
 final class DetectionViewController: UIViewController{
     
     var percent = 0
+    var isAdViewed = true
+    let motionManager = CMMotionManager()
     
     @IBOutlet weak var lableSubtitle: UILabel!
     @IBOutlet weak var lableText: UILabel!
@@ -27,17 +29,8 @@ final class DetectionViewController: UIViewController{
     @IBOutlet weak var subtitle2: UILabel!
     @IBOutlet weak var subtitle3: UILabel!
     
-    let overlayView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.7)
-        return view
-    }()
-    
-    let motionManager = CMMotionManager()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
     
     override func viewWillLayoutSubviews() {
@@ -46,13 +39,24 @@ final class DetectionViewController: UIViewController{
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        print(isAdViewed)
+        isAdViewed = false
         motionManager.stopMagnetometerUpdates()
     }
     
     @IBAction func detect(_ sender: Any) {
+        if isAdViewed {
+            setupDetector()
+        } else {
+            let vc = SubDetectorViewController()
+            vc.delegate = self
+            present(vc, animated: true)
+        }
+    }
+    
+    private func setupDetector() {
         performActionWithDelay(delay: 4)
         if motionManager.isMagnetometerAvailable {
-            
             motionManager.magnetometerUpdateInterval = 0.08
             motionManager.startMagnetometerUpdates(to: OperationQueue.main) { (magnetometerData, error) in
                 if let data = magnetometerData {
@@ -92,7 +96,7 @@ extension DetectionViewController {
         }
     }
     
-   private func alert() {
+    private func alert() {
         let alert = UIAlertController(title: "Oops", message: "The compass is not available on this device.", preferredStyle: .alert)
         let alertAction = UIAlertAction(title: "Ok", style: .default)
         
@@ -100,40 +104,45 @@ extension DetectionViewController {
         present(alert, animated: true)
     }
     
-   private func interpolateValue(_ value: CGFloat, from: CGFloat, to: CGFloat, minAngle: CGFloat, maxAngle: CGFloat) -> CGFloat {
-            let normalizedValue = (value - from) / (to - from)
-            let angleRange = maxAngle - minAngle
-            return minAngle + normalizedValue * angleRange
+    private func interpolateValue(_ value: CGFloat, from: CGFloat, to: CGFloat, minAngle: CGFloat, maxAngle: CGFloat) -> CGFloat {
+        let normalizedValue = (value - from) / (to - from)
+        let angleRange = maxAngle - minAngle
+        return minAngle + normalizedValue * angleRange
     }
     
-   private func updateImageRotation(angle: CGFloat) {
-            polygon.transform = CGAffineTransform(rotationAngle: angle)
+    private func updateImageRotation(angle: CGFloat) {
+        polygon.transform = CGAffineTransform(rotationAngle: angle)
     }
     
-   private func handleReceivedValue(_ value: CGFloat) {
-            let angle = interpolateValue(value, from: 0, to: 100, minAngle: 0, maxAngle: .pi)
-            updateImageRotation(angle: angle)
+    private func handleReceivedValue(_ value: CGFloat) {
+        let angle = interpolateValue(value, from: 0, to: 100, minAngle: 0, maxAngle: .pi)
+        updateImageRotation(angle: angle)
     }
     
-   private func performActionWithDelay(delay: TimeInterval) {
-           DispatchQueue.global().asyncAfter(deadline: .now() + delay) {
-               if self.percent < 10 {
-                   DispatchQueue.main.async {
-                       self.makeBlurEffect()
-                   }
-                   print("Received number: \(self.percent)")
-               } else {
-                   // Если число не получено, выводим сообщение в консоль
-                   print("Number not received within \(delay) seconds")
-               }
-           }
-       }
+    private func performActionWithDelay(delay: TimeInterval) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + delay) {
+            if self.percent < 10 {
+                DispatchQueue.main.async {
+                    self.makeBlurEffect()
+                }
+                print("Received number: \(self.percent)")
+            } else {
+                print("Number not received within \(delay) seconds")
+            }
+        }
+    }
     
     private func makeBlurEffect() {
         let vc = BlurViewController()
         vc.modalPresentationStyle = .overFullScreen
         present(vc, animated: true)
         motionManager.stopMagnetometerUpdates()
+    }
+}
+
+extension DetectionViewController: SubDetectorViewControllerDelegate {
+    func showAdd() {
+        isAdViewed = true
     }
 }
 

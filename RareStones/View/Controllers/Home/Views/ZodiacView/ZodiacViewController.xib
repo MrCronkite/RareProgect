@@ -20,6 +20,7 @@
                 <outlet property="heightBoxView" destination="JSV-Ob-jPP" id="zrz-Ef-dlu"/>
                 <outlet property="imageZodiac" destination="8Ta-xU-8qu" id="RHj-SD-ex4"/>
                 <outlet property="view" destination="iN0-l3-epB" id="rne-DO-jdl"/>
+                <outlet property="viewButton" destination="OcE-cU-OT7" id="WHr-5a-Ng0"/>
                 <outlet property="zodiacCollection" destination="fJt-Kd-dP8" id="s0d-eJ-XkV"/>
             </connections>
         </placeholder>
@@ -119,6 +120,14 @@
                         <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                     </collectionViewFlowLayout>
                 </collectionView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OcE-cU-OT7">
+                    <rect key="frame" x="41" y="748" width="311" height="54"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="311" id="QdB-zq-A4k"/>
+                        <constraint firstAttribute="height" constant="54" id="fdU-Wk-JC4"/>
+                    </constraints>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -130,7 +139,9 @@
                 <constraint firstItem="DkY-hK-VmJ" firstAttribute="top" secondItem="fJt-Kd-dP8" secondAttribute="bottom" constant="16" id="CMa-3B-ASb"/>
                 <constraint firstItem="fJt-Kd-dP8" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="IhF-da-6yo"/>
                 <constraint firstItem="DkY-hK-VmJ" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="KRe-R8-kAb"/>
+                <constraint firstItem="OcE-cU-OT7" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="KVG-R2-4zS"/>
                 <constraint firstItem="N8n-Q3-EUa" firstAttribute="top" secondItem="DkY-hK-VmJ" secondAttribute="bottom" constant="16" id="REb-ws-tbW"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="OcE-cU-OT7" secondAttribute="bottom" constant="16" id="Rrg-el-hhl"/>
                 <constraint firstItem="N8n-Q3-EUa" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="UdV-K0-INS"/>
                 <constraint firstItem="Wtd-lA-WVC" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="11" id="WOR-aH-7O0"/>
                 <constraint firstItem="fJt-Kd-dP8" firstAttribute="top" secondItem="KTz-Gq-cht" secondAttribute="bottom" constant="10" id="aff-VU-5IV"/>

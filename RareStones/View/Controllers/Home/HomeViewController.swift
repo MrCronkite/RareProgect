@@ -8,6 +8,7 @@
 import UIKit
 import Lottie
 import StoreKit
+import GoogleMobileAds
 
 final class HomeViewController: UIViewController {
     
@@ -15,13 +16,14 @@ final class HomeViewController: UIViewController {
     var articleAll: [Other] = []
     
     var originalArticle: [Other] = []
-    var alertController: UIAlertController?
-    
+   
     let networkArticle = NetworkArticlesImpl()
+    var adBannerView: GADBannerView!
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var articleTableView: UITableView!
     
+    @IBOutlet weak var boxAdView: UIView!
     @IBOutlet weak var originalCollection: UICollectionView!
     @IBOutlet weak var artLable: UILabel!
     @IBOutlet weak var btnTitle: UILabel!
@@ -51,7 +53,7 @@ final class HomeViewController: UIViewController {
     @IBOutlet weak var allView: UIView!
     @IBOutlet weak var healing: UIView!
     
-    let btn = ButtonView()
+    let buttonViewAnimate = ButtonView()
     @IBOutlet weak var viewBtn: UIView!
     
     @IBOutlet weak var rollUpBtn: UIButton!
@@ -59,8 +61,10 @@ final class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if #available(iOS 13.0, *) {
+            UIApplication.shared.statusBarStyle = .darkContent
+        }
         
-        getArticlesPinned()
         setupView()
         
         TimerManager.shared.startTimer()
@@ -86,6 +90,10 @@ final class HomeViewController: UIViewController {
         let tapGetPremium = UITapGestureRecognizer(target: self, action: #selector(goPremium))
         btnTitle.addGestureRecognizer(tapGetPremium)
         btnTitle.isUserInteractionEnabled = true
+        
+//        let vc = OnbordingViewController()
+//        vc.modalPresentationStyle = .fullScreen
+//        present(vc, animated: false)
     }
     
     override func viewWillLayoutSubviews() {
@@ -99,12 +107,15 @@ final class HomeViewController: UIViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+         getArticlesPinned()
+    }
+    
     @objc func updateUI() {
         let remainingTime = TimerManager.shared.remainingTime
         let formattedTime = formatTimeInterval(remainingTime)
         timeTitle.text = formattedTime
     }
-    
     
     @objc func goPremium() {
         let vc = GetPremiumViewController()
@@ -139,11 +150,10 @@ final class HomeViewController: UIViewController {
     @IBAction func seeAllTable(_ sender: Any) {
         rollUpBtn.isHidden = false
         seeAllBtn.isHidden = true
-        tableHigh.constant = 1080
+        tableHigh.constant = 1340
         article = articleAll
         articleTableView.reloadData()
-        viewHight.constant = 2000
-        showRating()
+        viewHight.constant = 2300
     }
     
     @IBAction func rollUpTable(_ sender: Any) {
@@ -154,7 +164,7 @@ final class HomeViewController: UIViewController {
         article.append(articleAll[0])
         article.append(articleAll[1])
         articleTableView.reloadData()
-        viewHight.constant = 1170
+        viewHight.constant = 1250
     }
 }
 
@@ -232,10 +242,16 @@ extension HomeViewController {
         articleTableView.separatorStyle = .none
         articleTableView.register(TableViewCell.self, forCellReuseIdentifier: "\(TableViewCell.self)")
         
-        btn.delegate = self
-        viewBtn.frame = btn.frame
-        btn.setupAnimation()
-        viewBtn.addSubview(btn)
+        buttonViewAnimate.delegate = self
+        viewBtn.frame = buttonViewAnimate.frame
+        buttonViewAnimate.setupAnimation()
+        viewBtn.addSubview(buttonViewAnimate)
+        
+        adBannerView = GADBannerView(adSize: GADAdSizeBanner)
+        addBannerViewToView(adBannerView)
+        adBannerView.adUnitID = R.Strings.KeyAd.bannerAdKey
+        adBannerView.rootViewController = self
+        adBannerView.load(GADRequest())
     }
     
     private func setupLayer() {
@@ -247,6 +263,27 @@ extension HomeViewController {
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
         mainView.layer.insertSublayer(gradientLayer, at: 0)
     }
+    
+    private func addBannerViewToView(_ adbannerView: GADBannerView) {
+        adbannerView.translatesAutoresizingMaskIntoConstraints = false
+        boxAdView.addSubview(adbannerView)
+        boxAdView.addConstraints(
+          [NSLayoutConstraint(item: adbannerView,
+                              attribute: .centerY,
+                              relatedBy: .equal,
+                              toItem: boxAdView,
+                              attribute: .centerY,
+                              multiplier: 1,
+                              constant: 0 ),
+           NSLayoutConstraint(item: adbannerView,
+                              attribute: .centerX,
+                              relatedBy: .equal,
+                              toItem: boxAdView,
+                              attribute: .centerX,
+                              multiplier: 1,
+                              constant: 0)
+          ])
+       }
     
     private func setupGradient(view: UIView) {
         let gradientLayer = CAGradientLayer()
@@ -276,6 +313,11 @@ extension HomeViewController {
             switch result {
             case .success(let data):
                 DispatchQueue.main.async {
+                    self.article = []
+                    self.seeAllBtn.isHidden = false
+                    self.rollUpBtn.isHidden = true
+                    self.tableHigh.constant = 270
+                    self.viewHight.constant = 1250
                     self.article.append(data.pinned[1])
                     self.article.append(data.pinned[0])
                     self.articleAll = data.pinned
@@ -286,46 +328,6 @@ extension HomeViewController {
             case .failure(let error): print(error)
             }
         }
-    }
-    
-    private func showRating() {
-        alertController = UIAlertController(title: "Rate the App", message: "Please rate our app", preferredStyle: .alert)
-        
-        let starStackView = UIStackView()
-        starStackView.translatesAutoresizingMaskIntoConstraints = false
-        starStackView.axis = .horizontal
-        starStackView.alignment = .center
-        starStackView.spacing = 10
-        
-        for _ in 1...5 {
-            let starButton = UIButton(type: .custom)
-            starButton.setImage(UIImage(systemName: "star"), for: .normal)
-            starButton.setImage(UIImage(systemName: "star.fill"), for: .selected)
-            starButton.addTarget(self, action: #selector(starButtonTapped(_:)), for: .touchUpInside)
-            starButton.translatesAutoresizingMaskIntoConstraints = false
-            starButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
-            starButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
-            starStackView.addArrangedSubview(starButton)
-        }
-        
-        alertController?.view.addSubview(starStackView)
-        
-        let constraints = [
-            starStackView.centerXAnchor.constraint(equalTo: alertController!.view.centerXAnchor),
-            starStackView.topAnchor.constraint(equalTo: alertController!.view.topAnchor, constant: 50),
-            starStackView.bottomAnchor.constraint(equalTo: (alertController!.view.bottomAnchor), constant: 0)
-        ]
-        NSLayoutConstraint.activate(constraints)
-        
-        present(alertController!, animated: true, completion: nil)
-    }
-    
-    @objc func starButtonTapped(_ sender: UIButton) {
-//        if let appURL = URL(string: "itms-apps://itunes.apple.com/app/ВАШ_ID_ПРИЛОЖЕНИЯ?mt=8&action=write-review") {
-//                    UIApplication.shared.open(appURL, options: [:], completionHandler: nil)
-//                }
-
-        dismiss(animated: true)
     }
 }
 

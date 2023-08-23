@@ -36,7 +36,7 @@ extension UILabel {
 extension String {
     func remove$() -> String {
         let cleanedString = self.replacingOccurrences(of: "[\\$,\\s]", with: "", options: .regularExpression)
-            return cleanedString
+        return cleanedString
     }
 }
 
@@ -50,12 +50,59 @@ extension UIView {
     func setupLayer() {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = self.frame
-        gradientLayer.colors = [UIColor(hexString: "#dbcffa").cgColor, UIColor(hexString: "#edf2fe").cgColor]
+        gradientLayer.colors = [UIColor(hexString: "#ddcdfa").cgColor, UIColor(hexString: "#d1ddfe").cgColor, UIColor(hexString: "#f2f6ff").cgColor]
+        gradientLayer.locations = [0.0, 0.5, 1.0]
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
         gradientLayer.zPosition = -2
         self.layer.insertSublayer(gradientLayer, at: 0)
     }
+    
+    func setupGradient() {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [UIColor(hexString: "#f1f2fe").cgColor, UIColor(hexString: "#e2e4fd").cgColor, R.Colors.blueLight.cgColor, UIColor(hexString: "#e2e4fd").cgColor, UIColor(hexString: "#f1f2fe").cgColor]
+        gradientLayer.locations = [0.0, 0.05, 0.5, 0.95, 1.0]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 1.0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.0)
+        gradientLayer.frame = self.bounds
+        gradientLayer.zPosition = -1
+        
+        self.layer.addSublayer(gradientLayer)
+        self.clipsToBounds = true
+    }
+    
+    func makeAnimationButton(_ button: UIButton) {
+        button.addTarget(self, action: #selector(handleIn), for: [
+            .touchDown,
+            .touchDragInside
+        ])
+        
+        button.addTarget(self, action: #selector(handleOut), for: [
+            .touchDragOutside,
+            .touchUpInside,
+            .touchUpOutside,
+            .touchDragExit,
+            .touchCancel
+        ])
+    }
+    
+    @objc func handleIn() {
+        UIView.animate(withDuration: 0.15) { self.alpha = 0.55 }
+    }
+    
+    
+    @objc func handleOut() {
+        UIView.animate(withDuration: 0.1, animations: {
+            self.alpha = 0.7
+            self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+        }) { (completed) in
+            UIView.animate(withDuration: 0.1, animations: {
+                self.alpha = 1.0
+                self.transform = CGAffineTransform.identity
+            })
+        }
+    }
+    
 }
 
 extension UIImageView {
@@ -66,32 +113,32 @@ extension UIImageView {
 
 class CustomRoundedTextView: UITextView {
     override func layoutSubviews() {
-            super.layoutSubviews()
-            
-            layer.cornerRadius = 15
-            layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner]
-            
-            let maskLayer = CAShapeLayer()
-            maskLayer.frame = bounds
-            let maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: [.bottomRight], cornerRadii: CGSize(width: 0, height: 0))
-            maskLayer.path = maskPath.cgPath
-            layer.mask = maskLayer
-        }
+        super.layoutSubviews()
+        
+        layer.cornerRadius = 15
+        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner]
+        
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = bounds
+        let maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: [.bottomRight], cornerRadii: CGSize(width: 0, height: 0))
+        maskLayer.path = maskPath.cgPath
+        layer.mask = maskLayer
+    }
 }
 
 class CustomRequestTextView: UITextView {
     override func layoutSubviews() {
-            super.layoutSubviews()
-            
-            layer.cornerRadius = 15
+        super.layoutSubviews()
+        
+        layer.cornerRadius = 15
         layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]
-            
-            let maskLayer = CAShapeLayer()
-            maskLayer.frame = bounds
-            let maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: [.bottomRight], cornerRadii: CGSize(width: 0, height: 0))
-            maskLayer.path = maskPath.cgPath
-            layer.mask = maskLayer
-        }
+        
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = bounds
+        let maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: [.bottomRight], cornerRadii: CGSize(width: 0, height: 0))
+        maskLayer.path = maskPath.cgPath
+        layer.mask = maskLayer
+    }
 }
 
 

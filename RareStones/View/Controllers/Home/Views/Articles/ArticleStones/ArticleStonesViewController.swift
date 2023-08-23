@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import GoogleMobileAds
 
 final class ArticleStonesViewController: UIViewController {
     
@@ -14,13 +15,17 @@ final class ArticleStonesViewController: UIViewController {
     var partsText: [PartItm] = []
     let networkArticle = NetworkArticlesImpl()
     var expandedIndexPaths: Set<IndexPath> = []
-    var height = 0
     
+    var adBannerView: GADBannerView!
+    var heightCell: [CGFloat] = []
+    
+    @IBOutlet weak var fakeImageView: UIImageView!
+    @IBOutlet weak var boxFakeView: UIView!
+    @IBOutlet weak var boxAdView: UIView!
     @IBOutlet weak var collectionArticles: UICollectionView!
     @IBOutlet weak var collectionHeight: NSLayoutConstraint!
     
     @IBOutlet weak var titleText: UILabel!
-    @IBOutlet weak var secondTitleText: UILabel!
     
     @IBOutlet weak var scrolView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
@@ -38,6 +43,7 @@ final class ArticleStonesViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         view.setupLayer()
+        collectionArticles.setupGradient()
     }
     
     @IBAction func closeVc(_ sender: Any) {
@@ -51,26 +57,27 @@ final class ArticleStonesViewController: UIViewController {
             case .success(let data):
                 DispatchQueue.main.async { [self] in
                     self.titleText.text = data.title
-                    self.imgStone.setupImgURL(url: data.relatedStones[0].image ?? "")
+                    self.imgStone.setupImgURL(url: data.thumbnail)
+                    self.fakeImageView.setupImgURL(url: data.relatedStones[0].image ?? "")
                     data.parts.forEach {
                         if $0.title == nil {
                             self.partsText.append($0)
                         } else { self.partsCell.append($0) }
                     }
-                    
-                    if self.partsText.count > 1 {
-                        self.secondTitleText.text = self.partsText[1].text
-                    } else {
-                        self.articleText.text = self.partsText[0].text
-                    }
-                    self.collectionHeight.constant = CGFloat(140 * self.partsCell.count)
-                    self.height = Int(self.collectionHeight.constant)
+                    self.articleText.text = self.partsText[0].text
                     self.collectionArticles.reloadData()
                 }
             case .failure(let error):
                 print(error)
             }
         }
+    }
+    
+    private func calculateCollectionHeight() {
+        let totalCellHeights = heightCell.reduce(0, +)
+        let headerHeight: CGFloat = 65
+        let collectionHeight = totalCellHeights + headerHeight
+        self.collectionHeight.constant = collectionHeight
     }
 }
 
@@ -80,13 +87,16 @@ extension ArticleStonesViewController {
         imgStone.layer.cornerRadius = 25
         imgStone.contentMode = .scaleAspectFill
         imgStone.clipsToBounds = true
-        boxTxt.layer.cornerRadius = 15
-        collectionHeight.isActive = true
+        boxTxt.layer.cornerRadius = 12
+        boxFakeView.layer.cornerRadius = 12
+        fakeImageView.layer.cornerRadius = 25
+        fakeImageView.contentMode = .scaleAspectFill
+        fakeImageView.clipsToBounds = true
         
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = .init(width: Int(collectionArticles.frame.width) - 34, height: 126)
+        layout.itemSize = .init(width: Int(collectionArticles.frame.width) - 34, height: 226)
         layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 12
+        layout.minimumInteritemSpacing = 15
         
         collectionArticles.layer.cornerRadius = 25
         collectionArticles.layer.borderWidth = 1
@@ -95,41 +105,44 @@ extension ArticleStonesViewController {
         collectionArticles.delegate = self
         collectionArticles.dataSource = self
         collectionArticles.register(TipsStoneCell.self, forCellWithReuseIdentifier: "TipsStoneCell")
+        
+        adBannerView = GADBannerView(adSize: GADAdSizeBanner)
+        addBannerViewToView(adBannerView)
+        adBannerView.adUnitID = R.Strings.KeyAd.bannerAdKey
+        adBannerView.rootViewController = self
+        adBannerView.load(GADRequest())
     }
-}
-
-extension ArticleStonesViewController: TipsStoneCellDelegate {
-    func buttonTapped(in cell: TipsStoneCell) {
-        if let indexPath = collectionArticles.indexPath(for: cell) {
-            if let indexPath = collectionArticles.indexPath(for: cell) {
-                if expandedIndexPaths.contains(indexPath) {
-                    expandedIndexPaths.remove(indexPath)
-                } else {
-                    expandedIndexPaths.insert(indexPath)
-                }
-                collectionArticles.reloadItems(at: [indexPath])
-            }
-            
-            let totalExpandedCellHeight = expandedIndexPaths.reduce(0) { (result, indexPath) -> CGFloat in
-                return result + (indexPath.row == indexPath.row ? 80 : 0)
-                        }
-            collectionHeight.constant = CGFloat(height)
-            collectionHeight.constant += totalExpandedCellHeight
-                        
-            UIView.animate(withDuration: 0.3) {
-                self.view.layoutIfNeeded()
-            }
-        }
+    
+    private func addBannerViewToView(_ adbannerView: GADBannerView) {
+        adbannerView.translatesAutoresizingMaskIntoConstraints = false
+        boxAdView.addSubview(adbannerView)
+        boxAdView.addConstraints(
+            [NSLayoutConstraint(item: adbannerView,
+                                attribute: .centerY,
+                                relatedBy: .equal,
+                                toItem: boxAdView,
+                                attribute: .centerY,
+                                multiplier: 1,
+                                constant: -10 ),
+             NSLayoutConstraint(item: adbannerView,
+                                attribute: .centerX,
+                                relatedBy: .equal,
+                                toItem: boxAdView,
+                                attribute: .centerX,
+                                multiplier: 1,
+                                constant: 0)
+            ])
     }
 }
 
 extension ArticleStonesViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if expandedIndexPaths.contains(indexPath) {
-            return CGSize(width: collectionView.frame.width - 34 , height: 206)
-        } else {
-            return CGSize(width: collectionView.frame.width - 34, height: 126)
-        }
+        let item = partsCell[indexPath.row]
+        let cellWidth = collectionView.frame.width - 32
+        let height = TipsStoneCell.calculateCellHeight(for: item.text, width: cellWidth) + 50
+        heightCell.append(height)
+        if partsCell.count == heightCell.count { calculateCollectionHeight() }
+        return CGSize(width: cellWidth, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -138,12 +151,9 @@ extension ArticleStonesViewController: UICollectionViewDataSource, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TipsStoneCell", for: indexPath) as? TipsStoneCell else { return UICollectionViewCell() }
-        cell.delegate = self
         cell.indexCell = indexPath.row
         cell.text.text = partsCell[indexPath.row].text
         cell.titleCell.text = partsCell[indexPath.row].title
-        
-        cell.isExpanded = expandedIndexPaths.contains(indexPath)
         return cell
     }
 }

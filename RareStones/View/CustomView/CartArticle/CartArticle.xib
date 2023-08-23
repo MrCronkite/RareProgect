@@ -13,7 +13,6 @@
             <connections>
                 <outlet property="borderImg" destination="uvK-zk-OWP" id="3KW-nu-vWH"/>
                 <outlet property="containerView" destination="JZ4-xQ-Wz2" id="fme-BF-C1E"/>
-                <outlet property="costText" destination="Eba-TI-KZP" id="XIY-pc-ldD"/>
                 <outlet property="imgView" destination="sHO-fW-LMf" id="iBZ-AI-4hn"/>
                 <outlet property="nameStone" destination="Wt2-o4-7Vi" id="3WU-FU-D5g"/>
                 <outlet property="textLable" destination="X7r-0s-rl3" id="Okz-FU-40e"/>
@@ -68,12 +67,6 @@
                     <color key="textColor" red="0.12754667650000001" green="0.085749556820000003" blue="0.04789505568" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$140 - $20 000 crt" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eba-TI-KZP">
-                    <rect key="frame" x="137" y="56" width="124" height="17"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BnQ-ys-ffz">
                     <rect key="frame" x="126.00000000000001" y="76" width="130.33333333333337" height="31"/>
                     <state key="normal" title="Button"/>
@@ -89,10 +82,8 @@
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="JZ4-xQ-Wz2" secondAttribute="bottom" constant="-34" id="3O1-6A-Np9"/>
                 <constraint firstItem="BnQ-ys-ffz" firstAttribute="top" secondItem="Wt2-o4-7Vi" secondAttribute="bottom" constant="20" id="J1m-eN-tZl"/>
-                <constraint firstItem="Eba-TI-KZP" firstAttribute="leading" secondItem="uvK-zk-OWP" secondAttribute="trailing" constant="21" id="Rt4-YJ-iT5"/>
                 <constraint firstItem="Wt2-o4-7Vi" firstAttribute="leading" secondItem="uvK-zk-OWP" secondAttribute="trailing" constant="21" id="YzP-NW-nR6"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="JZ4-xQ-Wz2" secondAttribute="trailing" id="jT5-6i-JdY"/>
-                <constraint firstItem="Eba-TI-KZP" firstAttribute="top" secondItem="Wt2-o4-7Vi" secondAttribute="bottom" id="pRC-LH-Tug"/>
                 <constraint firstItem="uvK-zk-OWP" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="rx3-lE-kp5"/>
                 <constraint firstItem="BnQ-ys-ffz" firstAttribute="leading" secondItem="uvK-zk-OWP" secondAttribute="trailing" constant="10" id="ssU-GU-Cp9"/>
                 <constraint firstItem="JZ4-xQ-Wz2" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="19" id="tll-25-Oqa"/>

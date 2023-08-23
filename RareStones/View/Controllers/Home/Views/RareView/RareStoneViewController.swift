@@ -46,7 +46,7 @@ extension RareStoneViewController {
     private func getRareStone() {
         networkStone.getStonesByTag(tag: "1") { result in
             switch result {
-            case.success(let data): print(data)
+            case.success(let data): 
                 DispatchQueue.main.async {
                     self.dataRocks = data.results
                     self.rareColletion.reloadData()

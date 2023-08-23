@@ -19,7 +19,7 @@ protocol NetworkStone {
 final class NetworkStoneImpl: NetworkStone {
     private enum API {
         static let rock = "https://my-stone-collection.com/api/rocks/"
-        static let token = "07e540b06bd3752865d6a10fe6123fc3403c5831"
+        static let token = UserDefaults.standard.string(forKey: R.Strings.KeyUserDefaults.token)!
         static let wishlist = "https://my-stone-collection.com/api/rocks/wishlist/"
         static let rareRock = "https://my-stone-collection.com/api/rocks/?tags=1"
         static let healingRock = "https://my-stone-collection.com/api/rocks/?tags=2"

@@ -15,6 +15,7 @@
                 <outlet property="artLable" destination="nWm-Bk-GLx" id="SYO-DH-eO7"/>
                 <outlet property="articleTableView" destination="x3D-kI-hCe" id="YBR-LY-cYV"/>
                 <outlet property="bannerView" destination="FQd-8E-nPI" id="W6w-d4-ORD"/>
+                <outlet property="boxAdView" destination="Plj-gk-hdh" id="YiD-a7-0K9"/>
                 <outlet property="btnTitle" destination="bCs-l1-yXE" id="iHx-xT-BBM"/>
                 <outlet property="btnView" destination="uu5-Rt-XeF" id="a9i-PK-B2d"/>
                 <outlet property="healing" destination="jbG-0R-29S" id="ZDs-NU-uqa"/>
@@ -53,7 +54,7 @@
                     <rect key="frame" x="0.0" y="113" width="393" height="705"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uQX-sU-ji1">
-                            <rect key="frame" x="0.0" y="0.0" width="393" height="1170"/>
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="1250"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FQd-8E-nPI">
                                     <rect key="frame" x="16" y="5" width="361" height="70"/>
@@ -496,7 +497,7 @@
                                 <constraint firstAttribute="trailing" secondItem="x3D-kI-hCe" secondAttribute="trailing" constant="16" id="dhA-JS-N1W"/>
                                 <constraint firstItem="FQd-8E-nPI" firstAttribute="leading" secondItem="uQX-sU-ji1" secondAttribute="leading" constant="16" id="en0-gY-YuT"/>
                                 <constraint firstItem="x3D-kI-hCe" firstAttribute="leading" secondItem="uQX-sU-ji1" secondAttribute="leading" constant="16" id="iMH-2W-gOF"/>
-                                <constraint firstAttribute="height" constant="1170" id="jli-YB-cLZ"/>
+                                <constraint firstAttribute="height" constant="1250" id="jli-YB-cLZ"/>
                                 <constraint firstItem="0Ny-3H-aiu" firstAttribute="centerX" secondItem="uQX-sU-ji1" secondAttribute="centerX" id="kxz-w6-ytI"/>
                                 <constraint firstItem="3Vh-T9-Ufx" firstAttribute="top" secondItem="x3D-kI-hCe" secondAttribute="bottom" constant="30" id="qmY-ea-mAr"/>
                                 <constraint firstItem="x3D-kI-hCe" firstAttribute="top" secondItem="rFa-pr-Z5w" secondAttribute="bottom" id="rUn-qO-ETL"/>
@@ -515,10 +516,17 @@
                     </constraints>
                 </scrollView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N6M-ii-sSe">
-                    <rect key="frame" x="41" y="734" width="311" height="54"/>
+                    <rect key="frame" x="41" y="684" width="311" height="54"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="311" id="aUN-uA-5zo"/>
                         <constraint firstAttribute="height" constant="54" id="h1v-PY-aW0"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Plj-gk-hdh">
+                    <rect key="frame" x="0.0" y="748" width="393" height="70"/>
+                    <color key="backgroundColor" red="0.97664338350000002" green="0.98400527240000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="70" id="yQu-Sa-nXA"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rq0-S4-6LC">
@@ -546,14 +554,17 @@
             <color key="backgroundColor" red="0.95967692140000005" green="0.11458269510000001" blue="0.1243254915" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="U28-Rc-cyv" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="0PY-hb-Hlp"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="N6M-ii-sSe" secondAttribute="bottom" constant="30" id="10N-K5-wLe"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="N6M-ii-sSe" secondAttribute="bottom" constant="80" id="10N-K5-wLe"/>
                 <constraint firstItem="rq0-S4-6LC" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="3x6-6L-d0e"/>
                 <constraint firstItem="U28-Rc-cyv" firstAttribute="top" secondItem="rq0-S4-6LC" secondAttribute="bottom" id="98k-Yf-Hpp"/>
                 <constraint firstItem="rq0-S4-6LC" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="B5v-ih-TJl"/>
                 <constraint firstItem="U28-Rc-cyv" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="HAE-1I-8YO"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="U28-Rc-cyv" secondAttribute="bottom" id="Iqs-TZ-Idy"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="rq0-S4-6LC" secondAttribute="trailing" id="SGn-Hy-SQu"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Plj-gk-hdh" secondAttribute="bottom" id="TsR-hr-qvV"/>
                 <constraint firstItem="uQX-sU-ji1" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="VNP-Td-pBr"/>
+                <constraint firstItem="Plj-gk-hdh" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="bKt-Pd-S4U"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Plj-gk-hdh" secondAttribute="trailing" id="lHa-Ec-NrM"/>
                 <constraint firstItem="N6M-ii-sSe" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="z9T-vI-ttb"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

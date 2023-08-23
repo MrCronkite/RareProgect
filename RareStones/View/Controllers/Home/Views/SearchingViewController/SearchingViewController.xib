@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SearchingViewController" customModule="RareStones" customModuleProvider="target">
             <connections>
                 <outlet property="azButton" destination="pQI-t4-IIN" id="YnX-QC-Wgr"/>
+                <outlet property="boxAdView" destination="e5T-fP-DWS" id="Fh2-1Z-hqw"/>
                 <outlet property="priceButton" destination="1ph-ve-sRB" id="Cg7-4i-XFl"/>
                 <outlet property="priceLowButton" destination="SvP-eI-5o5" id="5fs-Pq-NfX"/>
                 <outlet property="stoneColectionView" destination="Jhh-7c-4rO" id="mM8-fb-vGv"/>
@@ -68,7 +69,7 @@
                     <buttonConfiguration key="configuration" style="plain" title="Price high"/>
                 </button>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Jhh-7c-4rO">
-                    <rect key="frame" x="16" y="182" width="361" height="670"/>
+                    <rect key="frame" x="16" y="182" width="361" height="566"/>
                     <color key="backgroundColor" red="0.80424029419999998" green="0.80424029419999998" blue="0.80424029419999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="361" id="7ac-E4-2s5"/>
@@ -89,19 +90,29 @@
                     <state key="normal" title="Button"/>
                     <buttonConfiguration key="configuration" style="plain" title="Price low"/>
                 </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e5T-fP-DWS">
+                    <rect key="frame" x="0.0" y="748" width="393" height="104"/>
+                    <color key="backgroundColor" red="0.97664338350000002" green="0.98400527240000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="104" id="OqS-uX-7Xx"/>
+                    </constraints>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
+                <constraint firstItem="e5T-fP-DWS" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="1Pf-DM-mnN"/>
                 <constraint firstItem="pQI-t4-IIN" firstAttribute="top" secondItem="L0O-7t-FEk" secondAttribute="bottom" constant="16" id="7FY-uH-Bcp"/>
                 <constraint firstItem="1ph-ve-sRB" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="AKD-O3-Vy5"/>
                 <constraint firstItem="Jhh-7c-4rO" firstAttribute="top" secondItem="pQI-t4-IIN" secondAttribute="bottom" constant="20" id="IhU-tt-8gh"/>
                 <constraint firstItem="SvP-eI-5o5" firstAttribute="top" secondItem="L0O-7t-FEk" secondAttribute="bottom" constant="16" id="Iyb-3V-F4y"/>
                 <constraint firstItem="L0O-7t-FEk" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="OaR-3P-3lq"/>
                 <constraint firstItem="XTs-Ch-88c" firstAttribute="leading" secondItem="L0O-7t-FEk" secondAttribute="trailing" constant="10" id="S1e-Yn-gtn"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="e5T-fP-DWS" secondAttribute="trailing" id="UF4-SR-Qtf"/>
+                <constraint firstItem="e5T-fP-DWS" firstAttribute="top" secondItem="Jhh-7c-4rO" secondAttribute="bottom" id="VOq-Y2-Ii0"/>
                 <constraint firstItem="Jhh-7c-4rO" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="ZbU-EO-alW"/>
-                <constraint firstAttribute="bottom" secondItem="Jhh-7c-4rO" secondAttribute="bottom" id="Zxj-EA-W5Q"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="XTs-Ch-88c" secondAttribute="trailing" constant="16" id="d7I-bn-II4"/>
+                <constraint firstItem="e5T-fP-DWS" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" constant="34" id="dx8-79-cL8"/>
                 <constraint firstItem="1ph-ve-sRB" firstAttribute="leading" secondItem="pQI-t4-IIN" secondAttribute="trailing" constant="16" id="eq7-22-s6y"/>
                 <constraint firstItem="L0O-7t-FEk" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="fDm-yq-EnR"/>
                 <constraint firstItem="SvP-eI-5o5" firstAttribute="leading" secondItem="1ph-ve-sRB" secondAttribute="trailing" constant="16" id="hE4-cI-nMP"/>

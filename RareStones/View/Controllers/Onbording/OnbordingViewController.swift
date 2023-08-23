@@ -31,6 +31,11 @@ final class OnbordingViewController: UIViewController {
         
         setupPageViewController()
         setupView()
+        let vc = StartViewController()
+        vc.modalPresentationStyle = .fullScreen
+        DispatchQueue.main.async {
+            self.present(vc, animated: false)
+        }
     }
 }
 

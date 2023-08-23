@@ -15,6 +15,7 @@
                 <outlet property="bottomConstraint" destination="B2G-ns-ol7" id="uaf-hB-8ii"/>
                 <outlet property="boxSendMessage" destination="a9K-lG-X6X" id="Cic-gR-HLt"/>
                 <outlet property="btnSend" destination="M2K-7e-YzO" id="NKR-yC-6LF"/>
+                <outlet property="collectionHeight" destination="lg1-Qm-x5J" id="SlA-mo-FWF"/>
                 <outlet property="header" destination="LI2-jP-Bga" id="vhL-Ln-g1h"/>
                 <outlet property="messageCollection" destination="VYc-E1-T43" id="ztj-GN-ed2"/>
                 <outlet property="messageTxtField" destination="erV-KK-Dhl" id="Tog-8J-35j"/>
@@ -89,12 +90,12 @@
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="M2K-7e-YzO" secondAttribute="bottom" constant="16" id="8wB-j8-EZs"/>
+                        <constraint firstItem="VYc-E1-T43" firstAttribute="top" secondItem="kqr-XE-T30" secondAttribute="bottom" constant="18" id="AdM-1d-JQN"/>
                         <constraint firstItem="M2K-7e-YzO" firstAttribute="leading" secondItem="erV-KK-Dhl" secondAttribute="trailing" constant="9" id="Co7-yu-14b"/>
                         <constraint firstItem="kqr-XE-T30" firstAttribute="leading" secondItem="a9K-lG-X6X" secondAttribute="leading" constant="45" id="L8S-VS-Ald"/>
                         <constraint firstAttribute="bottom" secondItem="erV-KK-Dhl" secondAttribute="bottom" constant="16" id="LnW-Vz-etE"/>
                         <constraint firstItem="gCF-U5-NKp" firstAttribute="top" secondItem="a9K-lG-X6X" secondAttribute="top" constant="-9" id="MJt-eZ-geV"/>
                         <constraint firstItem="erV-KK-Dhl" firstAttribute="top" secondItem="VYc-E1-T43" secondAttribute="bottom" constant="9" id="Ze0-zI-KOq"/>
-                        <constraint firstAttribute="height" constant="160" id="aCU-0G-Z8O"/>
                         <constraint firstAttribute="trailing" secondItem="M2K-7e-YzO" secondAttribute="trailing" constant="16" id="bFX-TB-y0K"/>
                         <constraint firstAttribute="trailing" secondItem="VYc-E1-T43" secondAttribute="trailing" id="g6n-Li-42Y"/>
                         <constraint firstItem="VYc-E1-T43" firstAttribute="leading" secondItem="a9K-lG-X6X" secondAttribute="leading" id="kQJ-mM-s1v"/>

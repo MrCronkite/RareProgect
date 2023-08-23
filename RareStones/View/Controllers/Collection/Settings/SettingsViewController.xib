@@ -11,6 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsViewController" customModule="RareStones" customModuleProvider="target">
             <connections>
+                <outlet property="boxAdView" destination="oZt-OR-3WM" id="oEP-to-B7g"/>
                 <outlet property="inviteTxt" destination="j6J-7t-j2B" id="WoV-45-uLm"/>
                 <outlet property="inviteView" destination="pNj-TL-YxY" id="HvS-aB-cER"/>
                 <outlet property="privacyTxt" destination="fIm-Tl-ys0" id="2Qz-bg-kld"/>
@@ -256,10 +257,17 @@
                         <constraint firstItem="uBk-GX-HEu" firstAttribute="leading" secondItem="FE3-gu-HgZ" secondAttribute="trailing" constant="16" id="rJY-7v-Q1Z"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oZt-OR-3WM">
+                    <rect key="frame" x="0.0" y="748" width="393" height="70"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="70" id="TAk-ZN-2tN"/>
+                    </constraints>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="oZt-OR-3WM" secondAttribute="trailing" id="50g-XT-0Rb"/>
                 <constraint firstItem="kvD-Fz-psd" firstAttribute="top" secondItem="lIt-gj-nLS" secondAttribute="bottom" id="5Vj-c5-emw"/>
                 <constraint firstItem="QJL-Ek-EVn" firstAttribute="top" secondItem="6Ib-t8-WbO" secondAttribute="bottom" id="6si-jT-CW2"/>
                 <constraint firstItem="lIt-gj-nLS" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8Uj-Vk-RZh"/>
@@ -276,6 +284,7 @@
                 <constraint firstItem="N4Z-u5-aAT" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="XGJ-kx-55r"/>
                 <constraint firstItem="BJr-nT-JZj" firstAttribute="top" secondItem="R77-fd-0LA" secondAttribute="bottom" id="Zeb-kV-wZd"/>
                 <constraint firstItem="QJL-Ek-EVn" firstAttribute="top" secondItem="6Ib-t8-WbO" secondAttribute="bottom" id="bBF-Md-ALY"/>
+                <constraint firstItem="oZt-OR-3WM" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="czF-VQ-32y"/>
                 <constraint firstItem="tUW-v9-iC7" firstAttribute="top" secondItem="pNj-TL-YxY" secondAttribute="bottom" id="dOf-gg-R7k"/>
                 <constraint firstItem="R77-fd-0LA" firstAttribute="top" secondItem="pNj-TL-YxY" secondAttribute="bottom" id="fCG-Wy-gI2"/>
                 <constraint firstItem="QJL-Ek-EVn" firstAttribute="top" secondItem="6Ib-t8-WbO" secondAttribute="bottom" id="for-xK-Wt5"/>
@@ -286,6 +295,7 @@
                 <constraint firstItem="CL9-TW-5ov" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="io0-qY-Z6I"/>
                 <constraint firstItem="pNj-TL-YxY" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="k7b-g5-9zw"/>
                 <constraint firstAttribute="trailing" secondItem="lIt-gj-nLS" secondAttribute="trailing" id="km4-SM-O70"/>
+                <constraint firstItem="oZt-OR-3WM" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="kpH-EQ-8uB"/>
                 <constraint firstItem="lIt-gj-nLS" firstAttribute="top" secondItem="E7L-qg-tMk" secondAttribute="bottom" id="mQh-lF-nma"/>
                 <constraint firstItem="E7L-qg-tMk" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="mpx-2G-Yd6"/>
                 <constraint firstItem="kvD-Fz-psd" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="oiz-L4-fgy"/>

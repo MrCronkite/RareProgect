@@ -31,10 +31,19 @@ enum R {
                 switch tab {
                 case .home : return "Home"
                 case .detection : return "Detection"
-                case .collection : return "Collection"
+                case .collection : return "History"
                 case .aihelper : return "Ai Helper"
                 }
             }
+        }
+        enum Camera {
+            static let loadingText = ["Looking for a match", "Preparing a description", "Determine the cost per carat"]
+        }
+        enum KeyAd {
+            static let bannerAdKey = "ca-app-pub-3940256099942544/2934735716"
+        }
+        enum KeyUserDefaults {
+            static let token = "TokenKey"
         }
     }
     

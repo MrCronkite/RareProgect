@@ -11,14 +11,17 @@ final class CartStoneViewController: UIViewController {
     
     var dataRock: RockID? = nil
     var titleDiscription: [String] = []
+    var heightCell: [CGFloat] = []
+    var article: [Other?] = []
     
     var id = 0
     let networkStone = NetworkStoneImpl()
     var expandedIndexPaths: Set<IndexPath> = []
-    var height = 126
-    
+
     var isButtonSelected = false
     
+    @IBOutlet weak var titleArticle: UILabel!
+    @IBOutlet weak var articleTableView: UITableView!
     @IBOutlet weak var collectionDescription: UICollectionView!
     @IBOutlet weak var boxImg: UIView!
     @IBOutlet weak var stoneImgView: UIImageView!
@@ -34,6 +37,7 @@ final class CartStoneViewController: UIViewController {
     @IBOutlet weak var formulaTxt: UILabel!
     @IBOutlet weak var colorTxt: UILabel!
     
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var healingTeg: UILabel!
     @IBOutlet weak var rareTeg: UILabel!
     @IBOutlet weak var collectionHeight: NSLayoutConstraint!
@@ -41,11 +45,11 @@ final class CartStoneViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         getDataStone()
-        setupView()
     }
     
     override func viewWillLayoutSubviews() {
         view.setupLayer()
+        setupView()
     }
     
     @IBAction func goToRoot(_ sender: Any) {
@@ -72,7 +76,6 @@ final class CartStoneViewController: UIViewController {
             networkStone.deleteStoneFromWishlist(stoneID: id)
         }
     }
-    
 }
 
 extension CartStoneViewController {
@@ -106,15 +109,34 @@ extension CartStoneViewController {
         rareTeg.layer.cornerRadius = 15
         
         let secondLayout = UICollectionViewFlowLayout()
-        secondLayout.itemSize = .init(width: Int(collectionDescription.frame.width), height: 126)
+        secondLayout.itemSize = .init(width: Int(collectionDescription.frame.width), height: 206)
         secondLayout.scrollDirection = .vertical
         secondLayout.minimumLineSpacing = 12
         
         collectionDescription.backgroundColor = .clear
         collectionDescription.collectionViewLayout = secondLayout
-        collectionDescription.delegate = self
         collectionDescription.dataSource = self
+        collectionDescription.delegate = self
         collectionDescription.register(TipsStoneCell.self, forCellWithReuseIdentifier: "TipsStoneCell")
+        
+        articleTableView.backgroundColor = .clear
+        articleTableView.showsVerticalScrollIndicator = false
+        articleTableView.dataSource = self
+        articleTableView.delegate = self
+        articleTableView.rowHeight = UITableView.noIntrinsicMetric
+        articleTableView.separatorStyle = .none
+        articleTableView.register(TableViewCell.self, forCellReuseIdentifier: "\(TableViewCell.self)")
+    }
+    
+    private func calculateCollectionHeight() {
+        var collectionHeight = 0
+        if heightCell.count >= 2 {
+            collectionHeight += Int(heightCell[1] + heightCell[0]) + 32
+        } else if heightCell.count < 2 {
+            collectionHeight += Int(heightCell[0]) + 32
+        }
+        self.collectionHeight.constant = CGFloat(collectionHeight)
+        self.collectionDescription.reloadData()
     }
     
     private func setupDataView() {
@@ -131,8 +153,6 @@ extension CartStoneViewController {
         }
         if let health = rock.healthRisks, !health.isEmpty {
             titleDiscription.append(health)
-            self.height = 300
-            self.collectionHeight.constant = 300
         }
         collectionDescription.reloadData()
         if rock.isFavorite {
@@ -154,8 +174,17 @@ extension CartStoneViewController {
             case .success(let data):
                 DispatchQueue.main.async {
                     self.dataRock = data
+                    self.article = data.articles
                     self.setupDataView()
+                    if self.article.count == 0 {
+                        self.bottomConstraint.constant = 20
+                        self.titleArticle.isHidden = true
+                        self.articleTableView.isHidden = true
+                    } else if self.article.count >= 2 {
+                        self.bottomConstraint.constant = 500
+                    }
                     self.collectionImgStone.reloadData()
+                    self.articleTableView.reloadData()
                 }
             case .failure(let error): print(error)
             }
@@ -163,42 +192,43 @@ extension CartStoneViewController {
     }
 }
 
-extension CartStoneViewController: TipsStoneCellDelegate {
-    func buttonTapped(in cell: TipsStoneCell) {
-        if let indexPath = collectionDescription.indexPath(for: cell) {
-            if let indexPath = collectionDescription.indexPath(for: cell) {
-                if expandedIndexPaths.contains(indexPath) {
-                    expandedIndexPaths.remove(indexPath)
-                } else {
-                    expandedIndexPaths.insert(indexPath)
-                }
-                collectionDescription.reloadItems(at: [indexPath])
-            }
-            
-            let totalExpandedCellHeight = expandedIndexPaths.reduce(0) { (result, indexPath) -> CGFloat in
-                return result + (indexPath.row == indexPath.row ? 80 : 0)
-                        }
-            collectionHeight.constant = CGFloat(height)
-            collectionHeight.constant += totalExpandedCellHeight
-                        
-            UIView.animate(withDuration: 0.3) {
-                self.view.layoutIfNeeded()
-            }
-        }
+extension CartStoneViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        article.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "\(TableViewCell.self)", for: indexPath) as? TableViewCell else { return UITableViewCell() }
+        cell.selectionStyle = .none
+        cell.titleText.text = article[indexPath.row]!.title
+        cell.imageViewBase.setupImgURL(url: article[indexPath.row]!.thumbnail)
+        return cell
     }
 }
 
-extension CartStoneViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension CartStoneViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        132
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = ArticleViewController()
+        vc.id = String(article[indexPath.row]!.id)
+        present(vc, animated: true)
+    }
+}
+
+extension CartStoneViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if expandedIndexPaths.contains(indexPath) {
-            return CGSize(width: collectionView.frame.width, height: 206)
-        } else {
-            return CGSize(width: collectionView.frame.width, height: 126)
-        }
+        let item = titleDiscription[indexPath.row]
+        let cellWidth = collectionView.frame.width - 32
+        let height = TipsStoneCell.calculateCellHeight(for: item, width: cellWidth) + 50
+        heightCell.append(height)
+        print(height)
+        if titleDiscription.count == heightCell.count { calculateCollectionHeight() }
+        return CGSize(width: cellWidth, height: height)
     }
-}
-
-extension CartStoneViewController: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView {
         case collectionDescription: return titleDiscription.count
@@ -211,16 +241,13 @@ extension CartStoneViewController: UICollectionViewDataSource {
         switch collectionView {
         case collectionDescription:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(TipsStoneCell.self)" , for: indexPath) as? TipsStoneCell else { return UICollectionViewCell() }
-            cell.delegate = self
             cell.text.text = titleDiscription[indexPath.row]
             if indexPath.row == 0 {
                 cell.titleCell.text = "Description"
             } else {
                 cell.titleCell.text = "Healing risks"
             }
-            cell.isExpanded = expandedIndexPaths.contains(indexPath)
             return cell
-            
         case collectionImgStone:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(StoneImgCell.self)" , for: indexPath) as? StoneImgCell else { return UICollectionViewCell() }
             cell.imgCell.setupImgURL(url: (dataRock?.photos[indexPath.row].image) ?? "")

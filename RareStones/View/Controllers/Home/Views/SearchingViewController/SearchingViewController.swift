@@ -7,13 +7,16 @@
 
 import UIKit
 import SDWebImage
+import GoogleMobileAds
 
 final class SearchingViewController: UIViewController {
     
     let networkStone = NetworkStoneImpl()
-    
     var rocks: [Element] = []
     var filteredItems: [Element] = []
+    
+    var adBannerView: GADBannerView!
+    @IBOutlet weak var boxAdView: UIView!
     @IBOutlet weak var textFiledSearch: UITextField!
     @IBOutlet weak var azButton: UIButton!
     @IBOutlet weak var priceButton: UIButton!
@@ -123,7 +126,34 @@ extension SearchingViewController {
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.addGestureRecognizer(tapGesture)
+        
+        adBannerView = GADBannerView(adSize: GADAdSizeBanner)
+        addBannerViewToView(adBannerView)
+        adBannerView.adUnitID = R.Strings.KeyAd.bannerAdKey
+        adBannerView.rootViewController = self
+        adBannerView.load(GADRequest())
     }
+    
+    private func addBannerViewToView(_ adbannerView: GADBannerView) {
+        adbannerView.translatesAutoresizingMaskIntoConstraints = false
+        boxAdView.addSubview(adbannerView)
+        boxAdView.addConstraints(
+          [NSLayoutConstraint(item: adbannerView,
+                              attribute: .centerY,
+                              relatedBy: .equal,
+                              toItem: boxAdView,
+                              attribute: .centerY,
+                              multiplier: 1,
+                              constant: 0 ),
+           NSLayoutConstraint(item: adbannerView,
+                              attribute: .centerX,
+                              relatedBy: .equal,
+                              toItem: boxAdView,
+                              attribute: .centerX,
+                              multiplier: 1,
+                              constant: 0)
+          ])
+       }
     
     func getAllStones() {
         networkStone.getStones { [weak self] result in
@@ -132,6 +162,7 @@ extension SearchingViewController {
             case .success(let data):
                 DispatchQueue.main.async {
                     self.rocks = data.results
+                    self.rocks.shuffle()
                     self.filteredItems = self.rocks
                     self.stoneColectionView.reloadData()
                 }
@@ -143,15 +174,12 @@ extension SearchingViewController {
     func filterContentForSearchText(_ searchText: String?) {
         if let searchText = searchText, !searchText.isEmpty {
                 filteredItems = rocks.filter { item in
-                    guard let firstLetter = item.name.lowercased().first else {
-                        return false
-                    }
-                    return firstLetter == searchText.lowercased().first
+                    return item.name.lowercased().contains(searchText.lowercased())
                 }
             } else {
                 filteredItems = rocks
             }
-        stoneColectionView.reloadData()
+            stoneColectionView.reloadData()
     }
 }
 

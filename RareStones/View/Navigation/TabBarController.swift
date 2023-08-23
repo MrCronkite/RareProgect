@@ -34,7 +34,7 @@ extension TabBarController {
         tabBar.tintColor = R.Colors.active
         tabBar.unselectedItemTintColor = UIColor(hexString: "#CBD2E4")
         tabBar.backgroundColor = .white
-        tabBar.barTintColor = .white
+        tabBar.barTintColor = UIColor(hexString: "#F9FBFF")
         tabBar.layer.borderWidth = 1
         tabBar.layer.borderColor = UIColor(hexString: "#D8E2FE").cgColor
         

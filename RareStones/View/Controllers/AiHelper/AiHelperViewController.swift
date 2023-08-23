@@ -12,8 +12,9 @@ final class AiHelperViewController: UIViewController {
     let networkChat = NetworkChatImpl()
     var idMess = ""
     var messagesBot: [MessageElement] = []
+    var counter = 0
     
-    let messages = ["Describe the stone and ask how much it might be worth", "Describe the stone and ask how much it might be worth", "Describe the stone and ask how much it might be worth", "Describe the stone and ask how much it might be worth"]
+    var messages = ["Tell me interesting facts about rocks. What stones can be found in my country?", "Which stones are the most expensive in the world?", "What are the most popular stones to buy?"]
     
     let tintImgInactive = UIImage(named: "send")?.withTintColor(R.Colors.purple)
     let tintImgActive = UIImage(named: "send")?.withTintColor(R.Colors.roseBtn)
@@ -21,6 +22,7 @@ final class AiHelperViewController: UIViewController {
     var lastViewBottomAnchor: NSLayoutYAxisAnchor?
     @IBOutlet weak var scrollHigh: NSLayoutConstraint!
     
+    @IBOutlet weak var collectionHeight: NSLayoutConstraint!
     @IBOutlet weak var header: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var btnSend: UIButton!
@@ -47,31 +49,34 @@ final class AiHelperViewController: UIViewController {
         scrollHigh.constant = calculateNewInnerViewHeight() + CGFloat(140)
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        print("hello")
-    }
-    
     @IBAction func send(_ sender: Any) {
-        if let text = messageTxtField.text, !text.isEmpty, !text.trimmingCharacters(in: .whitespaces).isEmpty {
-            
-            createTextViewWithText(text, below: lastViewBottomAnchor)
-            header.isHidden = false
-            
-            sendMessage(textMessage: text)
-            
-            if avatar.isHidden == false{
-                UIView.animate(withDuration: 0.3) {
-                    self.avatar.isHidden = true
+        counter += 1
+        if counter >= 4 {
+            let vc = GetPremiumViewController()
+            vc.modalPresentationStyle = .fullScreen
+            present(vc, animated: true)
+        } else {
+            if let text = messageTxtField.text, !text.isEmpty, !text.trimmingCharacters(in: .whitespaces).isEmpty {
+                
+                createTextViewWithText(text, below: lastViewBottomAnchor)
+                header.isHidden = false
+                
+                sendMessage(textMessage: text)
+                
+                if avatar.isHidden == false{
+                    UIView.animate(withDuration: 0.3) {
+                        self.avatar.isHidden = true
+                    }
                 }
+                btnSend.isEnabled = false
+                btnSend.setImage(tintImgInactive, for: .normal)
+                btnCloseText()
             }
-            btnSend.isEnabled = false
-            btnSend.setImage(tintImgInactive, for: .normal)
-            btnCloseText()
         }
+        messageTxtField.text = ""
     }
     
     @IBAction func getPremium(_ sender: Any) {
-        dismiss(animated: true)
         let vc = StartFreeViewController()
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true)
@@ -290,7 +295,15 @@ extension AiHelperViewController: MessageCellDelegate {
     func sendText(text: String) {
         btnCloseText()
         messageTxtField.text = text
-        btnSend.setImage(tintImgInactive, for: .normal)
+        btnSend.setImage(tintImgActive, for: .normal)
+        if let index = messages.firstIndex(of: text) {
+            messages.remove(at: index)
+        }
+        messageCollection.reloadData()
+        if messages.count == 0 {
+            collectionHeight.constant = 0
+            messageCollection.isHidden = true
+        }
     }
 }
 

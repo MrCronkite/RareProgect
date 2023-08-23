@@ -23,7 +23,6 @@ final class CartArticle: UIView {
     @IBOutlet weak var textLable: UILabel!
     
     @IBOutlet weak var nameStone: UILabel!
-    @IBOutlet weak var costText: UILabel!
     
     weak var delegate: CartArticleDelegate?
     
@@ -65,6 +64,16 @@ extension CartArticle {
         textLable.greyColor()
         
         nameStone.textColor = R.Colors.darkGrey
-        costText.greyColor()
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [UIColor(hexString: "#f1f2fe").cgColor, UIColor(hexString: "#e2e4fd").cgColor, R.Colors.blueLight.cgColor, UIColor(hexString: "#e2e4fd").cgColor, UIColor(hexString: "#f1f2fe").cgColor]
+        gradientLayer.locations = [0.0, 0.1, 0.5, 0.9, 1.0]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 1.0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.0)
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: 363, height: 270)
+        gradientLayer.zPosition = -1
+        
+        containerView.layer.addSublayer(gradientLayer)
+        containerView.clipsToBounds = true
     }
 }

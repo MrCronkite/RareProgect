@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import GoogleMobileAds
 
 final class CollectionViewController: UIViewController {
     
     var alertController: UIAlertController?
+    var adBannerView: GADBannerView!
     
+    @IBOutlet weak var boxAdView: UIView!
     @IBOutlet weak var boxBtnView: UIView!
     @IBOutlet weak var btnSecond: UIButton!
     @IBOutlet weak var btnFirst: UIButton!
@@ -86,9 +89,9 @@ final class CollectionViewController: UIViewController {
             getStonesWhislist()
         }
     }
-     
+    
     @objc func openAllStones(_ sender: UITapGestureRecognizer) {
-       let vc = SearchingViewController()
+        let vc = SearchingViewController()
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true)
     }
@@ -132,6 +135,12 @@ extension CollectionViewController {
         if stonesWishList.count > 0 {
             boxText.isHidden = true
         }
+        
+        adBannerView = GADBannerView(adSize: GADAdSizeBanner)
+        addBannerViewToView(adBannerView)
+        adBannerView.adUnitID = R.Strings.KeyAd.bannerAdKey
+        adBannerView.rootViewController = self
+        adBannerView.load(GADRequest())
     }
     
     private func animateButtonPressed(view: UIView) {
@@ -144,6 +153,27 @@ extension CollectionViewController {
                 view.transform = CGAffineTransform.identity
             })
         }
+    }
+    
+    private func addBannerViewToView(_ adbannerView: GADBannerView) {
+        adbannerView.translatesAutoresizingMaskIntoConstraints = false
+        boxAdView.addSubview(adbannerView)
+        boxAdView.addConstraints(
+            [NSLayoutConstraint(item: adbannerView,
+                                attribute: .centerY,
+                                relatedBy: .equal,
+                                toItem: boxAdView,
+                                attribute: .centerY,
+                                multiplier: 1,
+                                constant: 0 ),
+             NSLayoutConstraint(item: adbannerView,
+                                attribute: .centerX,
+                                relatedBy: .equal,
+                                toItem: boxAdView,
+                                attribute: .centerX,
+                                multiplier: 1,
+                                constant: 0)
+            ])
     }
     
     private func getStonesWhislist() {
@@ -192,30 +222,30 @@ extension CollectionViewController {
         }
     }
     
-   private func showActivityIndicator() {
-            alertController = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
-       let activityIndicator = UIActivityIndicatorView(style: .large)
-            activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-            activityIndicator.startAnimating()
-            alertController?.view.addSubview(activityIndicator)
-            
-            let constraints = [
-                activityIndicator.centerXAnchor.constraint(equalTo: alertController!.view.centerXAnchor),
-                activityIndicator.topAnchor.constraint(equalTo: alertController!.view.topAnchor, constant: 40),
-                activityIndicator.heightAnchor.constraint(equalToConstant: 70),
-                activityIndicator.bottomAnchor.constraint(equalTo: alertController!.view.bottomAnchor, constant: 10)
-            ]
-            NSLayoutConstraint.activate(constraints)
-            
-            present(alertController!, animated: true, completion: nil)
-        }
+    private func showActivityIndicator() {
+        alertController = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.startAnimating()
+        alertController?.view.addSubview(activityIndicator)
         
-       private func hideActivityIndicator() {
-           DispatchQueue.main.async {
-               self.alertController?.dismiss(animated: true, completion: nil)
-               self.alertController = nil
-           }
+        let constraints = [
+            activityIndicator.centerXAnchor.constraint(equalTo: alertController!.view.centerXAnchor),
+            activityIndicator.topAnchor.constraint(equalTo: alertController!.view.topAnchor, constant: 40),
+            activityIndicator.heightAnchor.constraint(equalToConstant: 70),
+            activityIndicator.bottomAnchor.constraint(equalTo: alertController!.view.bottomAnchor, constant: 10)
+        ]
+        NSLayoutConstraint.activate(constraints)
+        
+        present(alertController!, animated: true, completion: nil)
+    }
+    
+    private func hideActivityIndicator() {
+        DispatchQueue.main.async {
+            self.alertController?.dismiss(animated: true, completion: nil)
+            self.alertController = nil
         }
+    }
 }
 
 extension CollectionViewController: CartStoneDelegate {

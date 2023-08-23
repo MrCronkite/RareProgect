@@ -18,7 +18,7 @@ final class MessageCell: UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: 14)
         label.backgroundColor = UIColor(hexString: "#C9F0CC")
         label.numberOfLines = 2
-        label.textAlignment = .center
+        label.textAlignment = .left
         return label
     }()
     

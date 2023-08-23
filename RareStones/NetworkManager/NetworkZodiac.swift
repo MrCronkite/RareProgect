@@ -20,7 +20,7 @@ enum Errors: Error {
 final class NetworkServicesZodiacImpl: NetworkServicesZodiac {
     private enum API {
         static let zodiac = "https://my-stone-collection.com/api/zodiac/"
-        static let token = "07e540b06bd3752865d6a10fe6123fc3403c5831"
+        static let token = UserDefaults.standard.string(forKey: R.Strings.KeyUserDefaults.token)!
     }
     
     private let urlSession: URLSession

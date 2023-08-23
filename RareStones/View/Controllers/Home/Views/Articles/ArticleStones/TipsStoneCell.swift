@@ -7,28 +7,11 @@
 
 import UIKit
 
-protocol TipsStoneCellDelegate: AnyObject {
-    func buttonTapped(in cell: TipsStoneCell)
-}
-
 final class TipsStoneCell: UICollectionViewCell {
-    
-    var isExpanded: Bool = false {
-           didSet {
-               if isExpanded {
-                   showBtn.setTitle("Roll up", for: .normal)
-               } else {
-                   showBtn.setTitle("See more", for: .normal)
-               }
-           }
-       }
     
     var indexCell = 0
     @IBOutlet weak var titleCell: UILabel!
     @IBOutlet weak var text: UILabel!
-    @IBOutlet weak var showBtn: UIButton!
-    
-    weak var delegate: TipsStoneCellDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -40,8 +23,8 @@ final class TipsStoneCell: UICollectionViewCell {
         setupView()
     }
     
-    @IBAction func showText(_ sender: Any) {
-        delegate?.buttonTapped(in: self)
+    func configure(with text: String) {
+        self.text.text = text
     }
 }
 
@@ -51,5 +34,21 @@ extension TipsStoneCell {
         view.frame = self.bounds
         self.addSubview(view)
         self.clipsToBounds = true
+    }
+    
+    static func calculateCellHeight(for text: String, width: CGFloat) -> CGFloat {
+        let label = UILabel()
+        label.text = text
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.preferredMaxLayoutWidth = width
+        label.font = UIFont.systemFont(ofSize: 16)
+        
+        let size = label.systemLayoutSizeFitting(
+            CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
+        return size.height
     }
 }

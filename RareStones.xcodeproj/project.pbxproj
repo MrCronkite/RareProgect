@@ -13,6 +13,7 @@
 		B20960242A84BD9700F844A5 /* NetworkZodiac.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20960232A84BD9700F844A5 /* NetworkZodiac.swift */; };
 		B21025E32A90E3970023D089 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21025E22A90E3970023D089 /* StartViewController.swift */; };
 		B21025E52A90E3E60023D089 /* StartViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B21025E42A90E3E60023D089 /* StartViewController.xib */; };
+		B21064D82A9520E800DEDA24 /* ArticleCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B21064D72A9520E800DEDA24 /* ArticleCellView.xib */; };
 		B21643A32A861F2A004BDFC8 /* ZodiacCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21643A22A861F2A004BDFC8 /* ZodiacCollectionCell.swift */; };
 		B21643A52A862E5E004BDFC8 /* CartArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21643A42A862E5E004BDFC8 /* CartArticle.swift */; };
 		B21643A82A862EE5004BDFC8 /* CartArticle.xib in Resources */ = {isa = PBXBuildFile; fileRef = B21643A72A862EE5004BDFC8 /* CartArticle.xib */; };
@@ -116,6 +117,7 @@
 		B20960232A84BD9700F844A5 /* NetworkZodiac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkZodiac.swift; sourceTree = "<group>"; };
 		B21025E22A90E3970023D089 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		B21025E42A90E3E60023D089 /* StartViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StartViewController.xib; sourceTree = "<group>"; };
+		B21064D72A9520E800DEDA24 /* ArticleCellView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ArticleCellView.xib; sourceTree = "<group>"; };
 		B21643A22A861F2A004BDFC8 /* ZodiacCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZodiacCollectionCell.swift; sourceTree = "<group>"; };
 		B21643A42A862E5E004BDFC8 /* CartArticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartArticle.swift; sourceTree = "<group>"; };
 		B21643A72A862EE5004BDFC8 /* CartArticle.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CartArticle.xib; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 				B2075CDF2A8F7B1B000DD45F /* ArticleViewController.swift */,
 				B2075CE12A8F80E4000DD45F /* ArticleViewController.xib */,
 				B2A215B92A8F966D006A37D8 /* ArticleCellView.swift */,
+				B21064D72A9520E800DEDA24 /* ArticleCellView.xib */,
 			);
 			path = ArticlesBase;
 			sourceTree = "<group>";
@@ -492,10 +495,10 @@
 		B296C3B32A8129E800802EBA /* RareStones */ = {
 			isa = PBXGroup;
 			children = (
-				B235C26A2A87F98E001B5696 /* Model */,
 				B20960222A84BD5700F844A5 /* NetworkManager */,
 				B296C3C82A812A1900802EBA /* Application */,
 				B296C3C92A812A2900802EBA /* View */,
+				B235C26A2A87F98E001B5696 /* Model */,
 				B296C3CC2A812AB500802EBA /* SupportingFille */,
 			);
 			path = RareStones;
@@ -803,6 +806,7 @@
 				B2AF63D82A8520ED00FDCDAB /* CartStone.xib in Resources */,
 				B296C3DE2A814B0000802EBA /* HomeViewController.xib in Resources */,
 				B246BB2E2A867D5000150A0D /* RareStoneViewController.xib in Resources */,
+				B21064D82A9520E800DEDA24 /* ArticleCellView.xib in Resources */,
 				B2AF2B572A894BC00049ADCB /* BlurViewController.xib in Resources */,
 				B234CFA32A8A0473000B41F8 /* CartStoneViewController.xib in Resources */,
 				B2FED4882A84C2DA000DE457 /* button.json in Resources */,

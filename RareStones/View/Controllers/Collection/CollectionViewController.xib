@@ -11,6 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CollectionViewController" customModule="RareStones" customModuleProvider="target">
             <connections>
+                <outlet property="boxAdView" destination="iys-o2-1OO" id="3NF-Ek-swI"/>
                 <outlet property="boxBtnView" destination="rqf-TD-5rV" id="Z04-xS-hgC"/>
                 <outlet property="boxText" destination="725-Is-K7d" id="BiS-1D-SRE"/>
                 <outlet property="btnFirst" destination="4rh-6J-l4q" id="ran-z3-zb5"/>
@@ -118,7 +119,7 @@
                     </collectionViewFlowLayout>
                 </collectionView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AEm-2U-wGs">
-                    <rect key="frame" x="41" y="735" width="311" height="53"/>
+                    <rect key="frame" x="41" y="685" width="311" height="53"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Open catalog" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u3m-up-G9C">
                             <rect key="frame" x="104.66666666666666" y="16" width="102" height="21"/>
@@ -135,16 +136,25 @@
                         <constraint firstItem="u3m-up-G9C" firstAttribute="centerX" secondItem="AEm-2U-wGs" secondAttribute="centerX" id="LYW-rg-swf"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iys-o2-1OO">
+                    <rect key="frame" x="0.0" y="748" width="393" height="70"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="70" id="BSD-TC-jYY"/>
+                    </constraints>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="GB5-rv-Lcz" secondAttribute="trailing" constant="16" id="2dO-J3-3HA"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="AEm-2U-wGs" secondAttribute="bottom" constant="30" id="3e1-zz-CuO"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="AEm-2U-wGs" secondAttribute="bottom" constant="80" id="3e1-zz-CuO"/>
                 <constraint firstItem="725-Is-K7d" firstAttribute="top" secondItem="rqf-TD-5rV" secondAttribute="bottom" constant="60" id="AyH-qG-Nea"/>
                 <constraint firstItem="DfX-5a-WOa" firstAttribute="top" secondItem="rqf-TD-5rV" secondAttribute="bottom" constant="16" id="CC0-aP-gjL"/>
                 <constraint firstItem="DfX-5a-WOa" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="ENk-WS-Y6Y"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="iys-o2-1OO" secondAttribute="bottom" id="Ffs-lw-pNj"/>
+                <constraint firstItem="iys-o2-1OO" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="OFu-bY-pxu"/>
                 <constraint firstItem="725-Is-K7d" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="UI4-5r-vR9"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="iys-o2-1OO" secondAttribute="trailing" id="YNf-Dz-Hx2"/>
                 <constraint firstItem="GB5-rv-Lcz" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="4" id="ZwC-sq-Qw5"/>
                 <constraint firstItem="AEm-2U-wGs" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="dZj-HQ-iOt"/>
                 <constraint firstItem="rqf-TD-5rV" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="60" id="gIh-jE-Xid"/>

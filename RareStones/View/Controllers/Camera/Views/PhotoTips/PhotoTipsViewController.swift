@@ -9,6 +9,13 @@ import UIKit
 
 final class PhotoTipsViewController: UIViewController {
      
+    @IBOutlet weak var subtitle6: UILabel!
+    @IBOutlet weak var subtitle5: UILabel!
+    @IBOutlet weak var subtitle4: UILabel!
+    @IBOutlet weak var subtitle3: UILabel!
+    @IBOutlet weak var subtitle2: UILabel!
+    @IBOutlet weak var subtitle1: UILabel!
+    @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var tintView: UIView!
     @IBOutlet weak var titleText: UILabel!
     @IBOutlet weak var textRoole: UILabel!
@@ -18,6 +25,7 @@ final class PhotoTipsViewController: UIViewController {
      override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        localize()
      }
     
     override func viewDidLayoutSubviews() {
@@ -44,5 +52,18 @@ extension PhotoTipsViewController {
         textRoole.greyColor()
         btnGo.backgroundColor = R.Colors.roseBtn
         btnGo.layer.cornerRadius = 25
+    }
+    
+    private func localize() {
+        closeButton.setTitle("", for: .normal)
+        titleText.text = "cam_photo_tips".localized
+        textRoole.text = "cam_pt_title".localized
+        btnGo.setTitle("detect_btn_go".localized, for: .normal)
+        subtitle1.text = "cam_pt_1".localized
+        subtitle2.text = "cam_pt_2".localized
+        subtitle3.text = "cam_pt_3".localized
+        subtitle4.text = "cam_pt_4".localized
+        subtitle5.text = "cam_pt_5".localized
+        subtitle6.text = "cam_pt_6".localized
     }
 }

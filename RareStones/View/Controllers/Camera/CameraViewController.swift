@@ -13,18 +13,41 @@ final class CameraViewController: UIViewController {
     
     var isAccessCamera = false
     var isAdViewed = false
+    var isFlash = false
     
     var cameraImg = UIImage()
-    
-    let networkClass = NetworkClassificationImpl()
-    var data: StonePhoto? = nil
-    var alertControllerLoad: UIAlertController?
-    
-    @IBOutlet weak var indetifactionTxt: UILabel!
     var currentPercentage = 0
     var currentIndex = 0
-    let regiserUser = RegistredUser()
-    let network = NetworkServicesZodiacImpl()
+    let networkClass = NetworkClassificationImpl()
+    var data: StonePhoto? = nil
+    let photoTipsVC = PhotoTipsViewController()
+    let capturePhotoOutput = AVCapturePhotoOutput()
+    let captureSession = AVCaptureSession()
+    var videoPreviewLayer: AVCaptureVideoPreviewLayer?
+    var tapImg: UITapGestureRecognizer?
+    
+    
+    @IBOutlet weak var keepLabel: UILabel!
+    @IBOutlet weak var containerText: UIView!
+    @IBOutlet weak var subtitle: UILabel!
+    @IBOutlet weak var titleCamera: UILabel!
+    @IBOutlet weak var tipsLable: UILabel!
+    @IBOutlet weak var buttonShot: UIButton!
+    @IBOutlet weak var buttonClose: UIButton!
+    @IBOutlet weak var indetifactionTxt: UILabel!
+    @IBOutlet weak var cameraView: UIView!
+    @IBOutlet weak var animateView: UIView!
+    @IBOutlet weak var flashBtn: UIImageView!
+    @IBOutlet weak var mainBtn: UIButton!
+    @IBOutlet weak var imageBtn: UIImageView!
+    @IBOutlet weak var flashView: UIView!
+    @IBOutlet weak var imgView: UIView!
+    @IBOutlet weak var openSettingsBtn: UIButton!
+    @IBOutlet weak var separator: UIImageView!
+    @IBOutlet weak var boxShadowView: UIView!
+    @IBOutlet weak var lookingText: UILabel!
+    @IBOutlet weak var percentText: UILabel!
+    @IBOutlet weak var presentPhotoView: UIImageView!
     
     let overlayView: UIView = {
         let view = UIView()
@@ -32,34 +55,9 @@ final class CameraViewController: UIViewController {
         return view
     }()
     
-    @IBOutlet weak var cameraView: UIView!
-    @IBOutlet weak var animateView: UIView!
-    @IBOutlet weak var flashBtn: UIImageView!
-    @IBOutlet weak var mainBtn: UIButton!
-    @IBOutlet weak var imageBtn: UIImageView!
-    
-    @IBOutlet weak var flashView: UIView!
-    @IBOutlet weak var imgView: UIView!
-    
-    @IBOutlet weak var openSettingsBtn: UIButton!
-    @IBOutlet weak var separator: UIImageView!
-    @IBOutlet weak var subtextSeparator: UIView!
-    @IBOutlet weak var text: UIImageView!
-    
-    @IBOutlet weak var boxShadowView: UIView!
-    @IBOutlet weak var lookingText: UILabel!
-    @IBOutlet weak var percentText: UILabel!
-    
-    @IBOutlet weak var presentPhotoView: UIImageView!
-    let photoTipsVC = PhotoTipsViewController()
-    
-    let settings = AVCapturePhotoSettings()
-    let capturePhotoOutput = AVCapturePhotoOutput()
-    let captureSession = AVCaptureSession()
-    var videoPreviewLayer: AVCaptureVideoPreviewLayer?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        localize()
         setupView()
         setupCamera()
     }
@@ -69,10 +67,8 @@ final class CameraViewController: UIViewController {
         videoPreviewLayer?.frame = cameraView.frame
         overlayView.frame = presentPhotoView.frame
         presentPhotoView.addSubview(overlayView)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        mainBtn.isEnabled = true
+        tapImg?.isEnabled = true
         if !captureSession.isRunning {
             DispatchQueue.global(qos: .userInitiated).async {
                 self.captureSession.startRunning()
@@ -80,10 +76,21 @@ final class CameraViewController: UIViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
     @IBAction func camShot(_ sender: Any) {
         if isAccessCamera {
+            mainBtn.isEnabled = false
+            tapImg?.isEnabled = false
             DispatchQueue.main.async {
-                self.capturePhotoOutput.capturePhoto(with: self.settings, delegate: self)
+                let settings = AVCapturePhotoSettings()
+                if self.isFlash {
+                    settings.flashMode = .on
+                } else { settings.flashMode = .off }
+                self.captureSession.addOutput(self.capturePhotoOutput)
+                self.capturePhotoOutput.capturePhoto(with: settings, delegate: self)
             }
         }
     }
@@ -103,42 +110,9 @@ final class CameraViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    @IBAction func showPhotoTips(_ sender: Any) {
+    @objc func showTips(_ sender: Any) {
         let vc = PhotoTipsViewController()
         present(vc, animated: true)
-    }
-    
-    @objc func toggleFlash(_ sender: UITapGestureRecognizer) {
-        if isAccessCamera {
-            if let captureDevice = AVCaptureDevice.default(for: .video) {
-                do {
-                    try captureDevice.lockForConfiguration()
-                    if captureDevice.hasTorch {
-                        if captureDevice.isTorchActive {
-                            captureDevice.torchMode = .off
-                            flashBtn.image = UIImage(named: "cam3")
-                            settings.flashMode = .off
-                        } else {
-                            try captureDevice.setTorchModeOn(level: 1.0)
-                            flashBtn.image = UIImage(named: "camOff")
-                            settings.flashMode = .on
-                        }
-                    }
-                    captureDevice.unlockForConfiguration()
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
-        }
-    }
-    
-    @objc func toggleGaller(_ sender: UITapGestureRecognizer) {
-        if isAccessCamera {
-            let imagePicker = UIImagePickerController()
-            imagePicker.sourceType = .photoLibrary
-            imagePicker.delegate = self
-            present(imagePicker, animated: true, completion: nil)
-        }
     }
 }
 
@@ -149,13 +123,17 @@ extension CameraViewController {
             $0?.backgroundColor = R.Colors.purple
         }
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(toggleFlash(_:)))
-        flashView.addGestureRecognizer(tap)
+        let tapFlash = UITapGestureRecognizer(target: self, action: #selector(toggleFlash(_:)))
+        flashView.addGestureRecognizer(tapFlash)
         flashView.isUserInteractionEnabled = true
         
-        let tapImg = UITapGestureRecognizer(target: self, action: #selector(toggleGaller(_:)))
-        imgView.addGestureRecognizer(tapImg)
+        tapImg = UITapGestureRecognizer(target: self, action: #selector(toggleGaller(_:)))
+        imgView.addGestureRecognizer(tapImg!)
         imgView.isUserInteractionEnabled = true
+        
+        let tipsTap = UITapGestureRecognizer(target: self, action: #selector(showTips))
+        tipsLable.isUserInteractionEnabled = true
+        tipsLable.addGestureRecognizer(tipsTap)
         
         boxShadowView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         boxShadowView.layer.cornerRadius = 13
@@ -174,24 +152,22 @@ extension CameraViewController {
         guard let captureDevice = AVCaptureDevice.default(for: .video) else { return }
         do {
             let input = try AVCaptureDeviceInput(device: captureDevice)
-            if captureSession.isRunning == false {
-                captureSession.removeInput(input)
-            }
             captureSession.addInput(input)
-            captureSession.addOutput(capturePhotoOutput)
-            
             videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
             videoPreviewLayer?.videoGravity = .resizeAspectFill
             videoPreviewLayer?.zPosition = -1
-            
             cameraView.layer.addSublayer(videoPreviewLayer!)
+            
             isAccessCamera = true
             openSettingsBtn.isHidden = true
             separator.isHidden = false
-            subtextSeparator.isHidden = true
-            text.isHidden = true
+            containerText.isHidden = true
+            boxShadowView.isHidden = false
         } catch {
-            print(error.localizedDescription)
+            boxShadowView.isHidden = true
+            separator.isHidden = true
+            openSettingsBtn.isHidden = false
+            containerText.isHidden = false
         }
     }
     
@@ -213,7 +189,6 @@ extension CameraViewController {
         animateView.backgroundColor = .clear
         animationView.backgroundColor = .clear
         animateView.addSubview(animationView)
-        
         animationView.play()
     }
     
@@ -240,24 +215,20 @@ extension CameraViewController {
     }
     
     private func sendPhoto(image: UIImage) {
-       // showActivityIndicator()
-        guard let imageData = image.jpegData(compressionQuality: 1.0) else { return }
+        let resizedImage = image.resized(to: CGSize(width: 200, height: 280))
+        guard let imageData = resizedImage.jpegData(compressionQuality: 0.5) else { return }
         networkClass.sendImageData(image: imageData) { [weak self] result in
             guard let self = self else { return }
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let data):
-                    DispatchQueue.main.async {
-                       // self.hideActivityIndicator()
-                        self.data = data
-                        self.showViewMatchesStone()
-                    }
-                case .failure(let error):
-                    print(error)
-                    DispatchQueue.main.async {
-                        //self.hideActivityIndicator()
-                        self.showViewMatchesStone()
-                    }
+            switch result {
+            case .success(let data):
+                DispatchQueue.main.async {
+                    self.data = data
+                    self.showViewMatchesStone()
+                }
+            case .failure(let error):
+                print(error)
+                DispatchQueue.main.async {
+                    self.showViewMatchesStone()
                 }
             }
         }
@@ -284,38 +255,57 @@ extension CameraViewController {
         }
     }
     
-    private func showActivityIndicator() {
-        alertControllerLoad = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
-        let activityIndicator = UIActivityIndicatorView(style: .large)
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.startAnimating()
-        alertControllerLoad?.view.addSubview(activityIndicator)
-        
-        let constraints = [
-            activityIndicator.centerXAnchor.constraint(equalTo: alertControllerLoad!.view.centerXAnchor),
-            activityIndicator.topAnchor.constraint(equalTo: alertControllerLoad!.view.topAnchor, constant: 40),
-            activityIndicator.heightAnchor.constraint(equalToConstant: 70),
-            activityIndicator.bottomAnchor.constraint(equalTo: alertControllerLoad!.view.bottomAnchor, constant: 10)
-        ]
-        NSLayoutConstraint.activate(constraints)
-        
-        present(alertControllerLoad!, animated: true, completion: nil)
+    private func localize() {
+        buttonShot.setTitle("", for: .normal)
+        buttonClose.setTitle("", for: .normal)
+        indetifactionTxt.text = "cam_identification".localized
+        titleCamera.text = "cam_settings_title".localized
+        subtitle.text = "cam_settings_subtitle".localized
+        subtitle.adjustsFontSizeToFitWidth = true
+        openSettingsBtn.setTitle("cam_settings_button".localized, for: .normal)
+        keepLabel.text = "cam_keep_text".localized
+        keepLabel.adjustsFontSizeToFitWidth = true
+        tipsLable.text = "cam_photo_tips".localized
+        tipsLable.adjustsFontSizeToFitWidth = true
     }
     
-    private func hideActivityIndicator() {
-        DispatchQueue.main.async {
-            self.alertControllerLoad?.dismiss(animated: true, completion: nil)
-            self.alertControllerLoad = nil
+    @objc func toggleFlash(_ sender: UITapGestureRecognizer) {
+        if isAccessCamera {
+            if let captureDevice = AVCaptureDevice.default(for: .video) {
+                do {
+                    try captureDevice.lockForConfiguration()
+                    if captureDevice.hasTorch {
+                        if captureDevice.isTorchActive {
+                            captureDevice.torchMode = .off
+                            flashBtn.image = UIImage(named: "cam3")
+                            isFlash = false
+                        } else {
+                            try captureDevice.setTorchModeOn(level: 1.0)
+                            flashBtn.image = UIImage(named: "camOff")
+                            isFlash = true
+                        }
+                    }
+                    captureDevice.unlockForConfiguration()
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    @objc func toggleGaller(_ sender: UITapGestureRecognizer) {
+        if isAccessCamera {
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = .photoLibrary
+            imagePicker.delegate = self
+            present(imagePicker, animated: true, completion: nil)
         }
     }
 }
 
 extension CameraViewController: SubscribeCameraViewControllerDelegate {
-    func showMatchesStone(_ isAdView: Bool) {
-        isAdViewed = isAdView
-        if isAdView {
-            sendPhoto(image: cameraImg)
-        }
+    func showMatchesStone() {
+        sendPhoto(image: cameraImg)
     }
 }
 
@@ -359,8 +349,4 @@ extension CameraViewController: UIImagePickerControllerDelegate, UINavigationCon
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
-}
-
-extension CameraViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
-    
 }

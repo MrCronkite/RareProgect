@@ -18,6 +18,7 @@ final class CartStone: UIView {
     
     var id = 0
     
+    @IBOutlet weak var upLable: UILabel!
     @IBOutlet weak var imageStone: UIImageView!
     @IBOutlet weak var titleStone: UILabel!
     @IBOutlet weak var priceStone: UILabel!
@@ -86,5 +87,7 @@ extension CartStone {
         btnHeart.layer.shadowOffset = CGSize(width: 2, height: 2)
         btnHeart.layer.shadowRadius = 4
         btnHeart.backgroundColor = .white
+        btnHeart.setTitle("", for: .normal)
+        upLable.text = "h_up_to".localized
     }
 }

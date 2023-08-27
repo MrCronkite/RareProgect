@@ -35,7 +35,7 @@ extension UILabel {
 
 extension String {
     func remove$() -> String {
-        let cleanedString = self.replacingOccurrences(of: "[\\$,\\s]", with: "", options: .regularExpression)
+        let cleanedString = self.replacingOccurrences(of: "[\\$,+\\s]", with: "", options: .regularExpression)
         return cleanedString
     }
 }
@@ -138,6 +138,21 @@ class CustomRequestTextView: UITextView {
         let maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: [.bottomRight], cornerRadii: CGSize(width: 0, height: 0))
         maskLayer.path = maskPath.cgPath
         layer.mask = maskLayer
+    }
+}
+
+extension UIImage {
+    func resized(to newSize: CGSize) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        defer { UIGraphicsEndImageContext() }
+        draw(in: CGRect(origin: .zero, size: newSize))
+        return UIGraphicsGetImageFromCurrentImageContext() ?? self
+    }
+}
+
+extension String {
+    var localized: String {
+        NSLocalizedString(self, comment: "")
     }
 }
 

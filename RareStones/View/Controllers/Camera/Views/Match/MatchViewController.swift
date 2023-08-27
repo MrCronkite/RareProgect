@@ -13,12 +13,18 @@ final class MatchViewController: UIViewController {
     var otherStones: [StoneClassificationResultModel] = []
     var alertController: UIAlertController?
     
+    @IBOutlet weak var subtitle: UILabel!
+    @IBOutlet weak var titleLable: UILabel!
+    @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var boxImgView: UIView!
     @IBOutlet weak var imgView: UIImageView!
     @IBOutlet weak var percentBox: UIView!
     @IBOutlet weak var percentTxt: UILabel!
     @IBOutlet weak var collectionOther: UICollectionView!
     
+    @IBOutlet weak var otherLable: UILabel!
+    @IBOutlet weak var upToText: UILabel!
+    @IBOutlet weak var matchText: UILabel!
     @IBOutlet weak var containerStoneView: UIView!
     @IBOutlet weak var imageStoneView: UIImageView!
     @IBOutlet weak var lableStone: UILabel!
@@ -28,19 +34,31 @@ final class MatchViewController: UIViewController {
         super.viewDidLoad()
         setupViewData()
         setupView()
-        
+        localize()
+    
         let tap = UITapGestureRecognizer(target: self, action: #selector(togle(_ :)))
         containerStoneView.addGestureRecognizer(tap)
         containerStoneView.isUserInteractionEnabled = true
+        DispatchQueue.global().asyncAfter(deadline: .now() + 3) {
+            DispatchQueue.main.async {
+                self.showRating()
+            }
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        setupPulsingAnimation()
     }
     
     override func viewDidLayoutSubviews() {
         view.setupLayer()
-        print(containerStoneView.frame.height)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+       
     }
     
     @IBAction func goToBack(_ sender: Any) {
-        showRating()
         dismiss(animated: true)
     }
     
@@ -86,23 +104,36 @@ extension MatchViewController{
         containerStoneView.layer.cornerRadius = 16
     
         containerStoneView.layer.shadowColor = UIColor.black.cgColor
-        containerStoneView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        containerStoneView.layer.shadowOffset = CGSize(width: 0, height: 7)
         containerStoneView.layer.shadowOpacity = 0.3
-        containerStoneView.layer.shadowRadius = 4
+        containerStoneView.layer.shadowRadius = 5
     }
     
     private func setupViewData() {
         guard let data = matchStones else { return }
-        imgView.setupImgURL(url: data.image)
-        imageStoneView.setupImgURL(url: data.results[0].stone.image)
-        lableStone.text = data.results[0].stone.name
-        priceStone.text = "\(data.results[0].stone.pricePerCaratTo?.remove$() ?? "$0") / crt"
-        otherStones = data.results
-        collectionOther.reloadData()
+        DispatchQueue.main.async {
+            self.imgView.setupImgURL(url: data.image)
+            self.imageStoneView.setupImgURL(url: data.results[0].stone.image)
+            self.lableStone.text = data.results[0].stone.name
+            self.priceStone.text = "\(data.results[0].stone.pricePerCaratTo?.remove$() ?? "$0") / ct"
+            self.otherStones = data.results
+            self.collectionOther.reloadData()
+        }
+        
+    }
+    
+    private func localize() {
+        closeButton.setTitle("", for: .normal)
+        titleLable.text = "cam_title_match".localized
+        subtitle.text = "cam_subtitle_match".localized
+        matchText.text = "cam_match".localized
+        matchText.adjustsFontSizeToFitWidth = true
+        otherLable.text = "cam_other_match".localized
+        upToText.text = "h_up_to".localized
     }
     
     private func showRating() {
-        alertController = UIAlertController(title: "Rate the App", message: "Please rate our app", preferredStyle: .alert)
+        alertController = UIAlertController(title: "cam_alert_title".localized, message: "cam_alert_subtitle".localized, preferredStyle: .alert)
         
         let starStackView = UIStackView()
         starStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -123,14 +154,36 @@ extension MatchViewController{
         
         alertController?.view.addSubview(starStackView)
         
+        let cancelAction = UIAlertAction(title: "cam_lable_mathc".localized, style: .cancel, handler: nil)
+            alertController?.addAction(cancelAction)
+        
         let constraints = [
             starStackView.centerXAnchor.constraint(equalTo: alertController!.view.centerXAnchor),
-            starStackView.topAnchor.constraint(equalTo: alertController!.view.topAnchor, constant: 50),
-            starStackView.bottomAnchor.constraint(equalTo: (alertController!.view.bottomAnchor), constant: 0)
+            starStackView.topAnchor.constraint(equalTo: alertController!.view.topAnchor, constant: 20),
+            starStackView.bottomAnchor.constraint(equalTo: (alertController!.view.bottomAnchor), constant: -20),
+            starStackView.heightAnchor.constraint(equalToConstant: 130)
         ]
         NSLayoutConstraint.activate(constraints)
         
         present(alertController!, animated: true, completion: nil)
+    }
+    
+    private func setupPulsingAnimation() {
+        let pulseLayer = CALayer()
+        pulseLayer.frame = containerStoneView.bounds
+        pulseLayer.cornerRadius = 16
+        pulseLayer.backgroundColor = UIColor.clear.cgColor
+        pulseLayer.borderWidth = 12
+        pulseLayer.borderColor = UIColor.white.cgColor
+        pulseLayer.zPosition = -1
+        containerStoneView.layer.insertSublayer(pulseLayer, below: containerStoneView.layer)
+        let animation = CABasicAnimation(keyPath: "transform.scale")
+        animation.duration = 0.8
+        animation.fromValue = 0.9
+        animation.toValue = 1.1
+        animation.autoreverses = true
+        animation.repeatCount = Float.infinity
+        pulseLayer.add(animation, forKey: "pulsing")
     }
 }
 
@@ -155,7 +208,7 @@ extension MatchViewController: UICollectionViewDataSource {
         
         cell.titleTxt.text = otherStones[indexPath.row].stone.name
         cell.imgView.setupImgURL(url: otherStones[indexPath.row].stone.image)
-        cell.priceTxt.text = "$\(otherStones[indexPath.row].stone.pricePerCaratFrom?.remove$() ?? "0") - $\(otherStones[indexPath.row].stone.pricePerCaratTo?.remove$() ?? "0") crt"
+        cell.priceTxt.text = "$\(otherStones[indexPath.row].stone.pricePerCaratFrom?.remove$() ?? "0") - $\(otherStones[indexPath.row].stone.pricePerCaratTo?.remove$() ?? "0") ct"
         cell.id = otherStones[indexPath.row].stone.id
         cell.delegate = self
         return cell

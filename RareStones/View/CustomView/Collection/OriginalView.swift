@@ -39,6 +39,7 @@ extension OriginalView {
         lableText.backgroundColor = UIColor(hexString: "#bd82ff")
         lableText.layer.cornerRadius = 12
         lableText.clipsToBounds = true
+    
     }
     
     func setImage(imageName: String) {

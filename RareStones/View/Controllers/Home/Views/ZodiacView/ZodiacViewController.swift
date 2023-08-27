@@ -7,6 +7,7 @@
 
 import UIKit
 import Lottie
+import GoogleMobileAds
 
 final class ZodiacViewController: UIViewController {
     
@@ -14,29 +15,31 @@ final class ZodiacViewController: UIViewController {
     var zodiacStones: [StoneElement] = []
     let networkService = NetworkServicesZodiacImpl()
     let buttonViewAnimate = ButtonView()
+    var adBannerView: GADBannerView!
     
+    @IBOutlet weak var dataOfBirthLable: UILabel!
+    @IBOutlet weak var titleZodiac: UILabel!
+    @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var viewButton: UIView!
     @IBOutlet weak var heightBoxView: NSLayoutConstraint!
-    
-    @IBOutlet weak var dataBirdtext: UILabel!
     @IBOutlet weak var elementTxt: UILabel!
-    
     @IBOutlet weak var boxZodiac: UIView!
     @IBOutlet weak var imageZodiac: UIImageView!
     @IBOutlet weak var dataBirthText: UILabel!
     @IBOutlet weak var elementText: UILabel!
-    
-    @IBOutlet weak var articleCollectionView: UICollectionView!
     @IBOutlet weak var zodiacCollection: UICollectionView!
+    @IBOutlet weak var stoneTableView: UITableView!
+    @IBOutlet weak var bannerView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        localize()
         getZodiac()
         getZodiacForId(id: "1")
+        setupView()
     }
     
     override func viewWillLayoutSubviews() {
-        setupView()
         view.setupLayer()
         boxZodiac.setupGradient()
     }
@@ -70,7 +73,7 @@ final class ZodiacViewController: UIViewController {
                     self.imageZodiac.setupImgURL(url: data.image)
                     self.zodiacStones = data.stones
                     self.boxZodiac.isHidden = false
-                    self.articleCollectionView.reloadData()
+                    self.stoneTableView.reloadData()
                 }
             case .failure(let error):
                 print(error)
@@ -96,15 +99,17 @@ extension ZodiacViewController {
         zodiacCollection.delegate = self
         zodiacCollection.register(ZodiacCollectionCell.self, forCellWithReuseIdentifier: "\(ZodiacCollectionCell.self)")
         
-        articleCollectionView.collectionViewLayout = layout1
-        articleCollectionView.showsVerticalScrollIndicator = false
-        articleCollectionView.backgroundColor = .clear
-        articleCollectionView.dataSource = self
-        articleCollectionView.delegate = self
-        articleCollectionView.register(ArticleCollectionCell.self, forCellWithReuseIdentifier: "\(ArticleCollectionCell.self)")
+        stoneTableView.contentInset = .init(top: 0, left: 0, bottom: 130, right: 0)
+        stoneTableView.backgroundColor = .clear
+        stoneTableView.showsVerticalScrollIndicator = false
+        stoneTableView.dataSource = self
+        stoneTableView.delegate = self
+        stoneTableView.rowHeight = UITableView.noIntrinsicMetric
+        stoneTableView.separatorStyle = .none
+        stoneTableView.register(StoneZodiacCell.self, forCellReuseIdentifier: "\(StoneZodiacCell.self)")
         
         elementTxt.greyColor()
-        dataBirdtext.greyColor()
+        dataOfBirthLable.greyColor()
         boxZodiac.backgroundColor = R.Colors.blueLight
         boxZodiac.layer.cornerRadius = 20
         boxZodiac.layer.borderWidth = 1
@@ -113,50 +118,48 @@ extension ZodiacViewController {
         
         viewButton.layer.cornerRadius = 25
         viewButton.backgroundColor = .clear
-        
         buttonViewAnimate.delegate = self
         viewButton.frame = buttonViewAnimate.frame
         buttonViewAnimate.setupAnimation()
         viewButton.addSubview(buttonViewAnimate)
-    }
-}
-
-extension ZodiacViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch collectionView {
-        case zodiacCollection: return zodiacCategory.count
-        case articleCollectionView: return zodiacStones.count
-        default: return 0
-        }
+        viewButton.layer.shadowColor = UIColor.black.cgColor
+        viewButton.layer.shadowOpacity = 0.2
+        viewButton.layer.shadowOffset = CGSize(width: 0, height: 10)
+        viewButton.layer.shadowRadius = 10
+        
+        adBannerView = GADBannerView(adSize: GADAdSizeBanner)
+        addBannerViewToView(adBannerView)
+        adBannerView.adUnitID = R.Strings.KeyAd.bannerAdKey
+        adBannerView.rootViewController = self
+        adBannerView.load(GADRequest())
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch collectionView {
-        case zodiacCollection:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(ZodiacCollectionCell.self)", for: indexPath) as? ZodiacCollectionCell
-            else { return UICollectionViewCell() }
-            cell.lableTextCell.text = zodiacCategory[indexPath.row].name
-            return cell
-        case articleCollectionView:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(ArticleCollectionCell.self)", for: indexPath) as? ArticleCollectionCell
-            else { return UICollectionViewCell() }
-            cell.cartArticle.delegate = self
-            cell.cartArticle.id = zodiacStones[indexPath.row].stone.id
-            cell.cartArticle.nameStone.text = zodiacStones[indexPath.row].stone.name
-            cell.cartArticle.imgView.setupImgURL(url: zodiacStones[indexPath.row].stone.image)
-            cell.cartArticle.textLable.text = zodiacStones[indexPath.row].description
-            return cell
-        default: return UICollectionViewCell()
-        }
+    private func addBannerViewToView(_ adbannerView: GADBannerView) {
+        adbannerView.translatesAutoresizingMaskIntoConstraints = false
+        bannerView.addSubview(adbannerView)
+        bannerView.addConstraints(
+            [NSLayoutConstraint(item: adbannerView,
+                                attribute: .centerY,
+                                relatedBy: .equal,
+                                toItem: bannerView,
+                                attribute: .centerY,
+                                multiplier: 1,
+                                constant: -10 ),
+             NSLayoutConstraint(item: adbannerView,
+                                attribute: .centerX,
+                                relatedBy: .equal,
+                                toItem: bannerView,
+                                attribute: .centerX,
+                                multiplier: 1,
+                                constant: 0)
+            ])
     }
-}
-
-extension ZodiacViewController: CartArticleDelegate {
-    func sendDataStone(idStone: Int) {
-        let vc = CartStoneViewController()
-        vc.id = idStone
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: true)
+    
+    private func localize() {
+        backButton.setTitle("", for: .normal)
+        elementTxt.text = "h_zodiac_element".localized
+        dataOfBirthLable.text = "h_dataofbirth".localized
+        titleZodiac.text = "h_zodiac_title".localized
     }
 }
 
@@ -168,7 +171,51 @@ extension ZodiacViewController: ButtonViewDelegate {
     }
 }
 
-extension ZodiacViewController: UICollectionViewDelegate {
+extension ZodiacViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        zodiacStones.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "\(StoneZodiacCell.self)", for: indexPath) as? StoneZodiacCell else { return UITableViewCell()}
+        cell.imageStoneView.setupImgURL(url: zodiacStones[indexPath.row].stone.image)
+        cell.nameStone.text = zodiacStones[indexPath.row].stone.name
+        cell.titleStone.text = zodiacStones[indexPath.row].description
+        cell.selectionStyle = .none
+        return cell
+    }
+}
+
+extension ZodiacViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let item = zodiacStones[indexPath.row].description
+        let cellWidth = tableView.frame.width
+        let height = TipsStoneCell.calculateCellHeight(for: item, width: cellWidth)
+        return height + 170
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = CartStoneViewController()
+        vc.id = zodiacStones[indexPath.row].stone.id
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true)
+    }
+}
+
+extension ZodiacViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        zodiacCategory.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(ZodiacCollectionCell.self)", for: indexPath) as? ZodiacCollectionCell
+        else { return UICollectionViewCell() }
+        cell.lableTextCell.text = zodiacCategory[indexPath.row].name
+        return cell
+    }
+}
+
+extension ZodiacViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? ZodiacCollectionCell else { return }
         cell.isSelected = !cell.isSelected

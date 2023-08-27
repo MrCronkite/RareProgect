@@ -22,22 +22,22 @@ final class HomeViewController: UIViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var articleTableView: UITableView!
-    
     @IBOutlet weak var boxAdView: UIView!
     @IBOutlet weak var originalCollection: UICollectionView!
     @IBOutlet weak var artLable: UILabel!
     @IBOutlet weak var btnTitle: UILabel!
     @IBOutlet weak var btnView: UIView!
     @IBOutlet weak var timeTitle: UILabel!
-    @IBOutlet var mainView: UIView!
+    @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var scrolView: UIScrollView!
     @IBOutlet weak var navBar: UIView!
     @IBOutlet weak var searchTextField: UITextField!
-    
     @IBOutlet weak var bannerView: UIView!
-    
     @IBOutlet weak var titleTextAll: UILabel!
     @IBOutlet weak var titleTextHealing: UILabel!
+    @IBOutlet weak var uptoLable: UILabel!
+    @IBOutlet weak var subtitlePremium: UILabel!
+    @IBOutlet weak var titlePremium: UILabel!
     @IBOutlet weak var titleZodiac: UILabel!
     @IBOutlet weak var titleRare: UILabel!
     @IBOutlet weak var titleOriginal: UILabel!
@@ -45,7 +45,6 @@ final class HomeViewController: UIViewController {
     @IBOutlet weak var subtitleHealing: UILabel!
     @IBOutlet weak var subtitleZodiac: UILabel!
     @IBOutlet weak var subtitleRare: UILabel!
-    
     @IBOutlet weak var viewHight: NSLayoutConstraint!
     @IBOutlet weak var tableHigh: NSLayoutConstraint!
     @IBOutlet weak var zodiacView: UIView!
@@ -53,6 +52,9 @@ final class HomeViewController: UIViewController {
     @IBOutlet weak var allView: UIView!
     @IBOutlet weak var healing: UIView!
     
+    @IBOutlet weak var upToLable3: UILabel!
+    @IBOutlet weak var upToLable2: UILabel!
+    @IBOutlet weak var upToLable1: UILabel!
     let buttonViewAnimate = ButtonView()
     @IBOutlet weak var viewBtn: UIView!
     
@@ -61,10 +63,7 @@ final class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if #available(iOS 13.0, *) {
-            UIApplication.shared.statusBarStyle = .darkContent
-        }
-        
+        setupLocaliz()
         setupView()
         
         TimerManager.shared.startTimer()
@@ -91,9 +90,9 @@ final class HomeViewController: UIViewController {
         btnTitle.addGestureRecognizer(tapGetPremium)
         btnTitle.isUserInteractionEnabled = true
         
-//        let vc = OnbordingViewController()
-//        vc.modalPresentationStyle = .fullScreen
-//        present(vc, animated: false)
+        let vc = OnbordingViewController()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: false)
     }
     
     override func viewWillLayoutSubviews() {
@@ -185,7 +184,6 @@ extension HomeViewController {
         gradientLayer.zPosition = -1
         btnView.layer.addSublayer(gradientLayer)
         btnTitle.textColor = R.Colors.darkGrey
-        btnTitle.text = "Get Premium"
         
         let iconImageView = UIImageView(image: UIImage(named: "search"))
         iconImageView.contentMode = .center
@@ -247,11 +245,14 @@ extension HomeViewController {
         buttonViewAnimate.setupAnimation()
         viewBtn.addSubview(buttonViewAnimate)
         
-        adBannerView = GADBannerView(adSize: GADAdSizeBanner)
-        addBannerViewToView(adBannerView)
-        adBannerView.adUnitID = R.Strings.KeyAd.bannerAdKey
-        adBannerView.rootViewController = self
-        adBannerView.load(GADRequest())
+    
+            adBannerView = GADBannerView(adSize: GADAdSizeBanner)
+            addBannerViewToView(adBannerView)
+            adBannerView.adUnitID = R.Strings.KeyAd.bannerAdKey
+            adBannerView.rootViewController = self
+            adBannerView.load(GADRequest())
+        
+        
     }
     
     private func setupLayer() {
@@ -328,6 +329,37 @@ extension HomeViewController {
             case .failure(let error): print(error)
             }
         }
+    }
+    
+    private func setupLocaliz() {
+        searchTextField.text = "h_search_field".localized
+        titlePremium.text = "h_lable_premium_title".localized
+        subtitlePremium.text = "h_lable_premium_subtitle".localized
+        subtitlePremium.adjustsFontSizeToFitWidth = true
+        btnTitle.text = "h_button_premium".localized
+        titleTextAll.text = "h_title_stone_all".localized
+        titleTextHealing.text = "h_title_stone_healing".localized
+        titleTextHealing.adjustsFontSizeToFitWidth = true
+        titleZodiac.text = "h_title_stone_zodiac".localized
+        titleRare.text = "h_title_stone_rare".localized
+        subtitleAll.text = "h_subtitle_all".localized
+        subtitleHealing.text = "h_subtitle_healing".localized
+        subtitleHealing.adjustsFontSizeToFitWidth = true
+        subtitleZodiac.text = "h_subtitle_zodiac".localized
+        subtitleZodiac.adjustsFontSizeToFitWidth = true
+        subtitleRare.text = "h_subtitle_rare".localized
+        artLable.text = "h_articles".localized
+        titleOriginal.text = "h_original_vs_fake".localized
+        uptoLable.text = "h_up_to".localized
+        uptoLable.adjustsFontSizeToFitWidth = true
+        upToLable1.text = "h_up_to".localized
+        upToLable1.adjustsFontSizeToFitWidth = true
+        upToLable2.text = "h_up_to".localized
+        upToLable2.adjustsFontSizeToFitWidth = true
+        upToLable3.text = "h_up_to".localized
+        upToLable3.adjustsFontSizeToFitWidth = true
+        seeAllBtn.setTitle("h_button_see".localized, for: .normal)
+        rollUpBtn.setTitle("h_button_roll".localized, for: .normal)
     }
 }
 

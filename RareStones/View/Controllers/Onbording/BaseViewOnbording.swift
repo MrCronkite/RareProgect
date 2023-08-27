@@ -11,23 +11,29 @@ import Lottie
 final class BaseViewOnbording: UIViewController {
     
     @IBOutlet weak var subtitleText: UILabel!
-    
     @IBOutlet weak var titleOriginal: UILabel!
     @IBOutlet weak var bgImgView: UIImageView!
-    
+    @IBOutlet weak var viewAnim: UIView!
     @IBOutlet weak var nameStone: UILabel!
     
     var nameAnimation = ""
-    
-    var animationView = LottieAnimationView()
+    var animationView: LottieAnimationView?
     
     init(subtitle: String? = nil, nameAnimation: String){
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .clear
-        self.subtitleText.text = subtitle
+        nameStone.text = "onb_sub_diamond".localized
+        titleOriginal.text = "onb_original".localized
+        titleOriginal.adjustsFontSizeToFitWidth = true
+        self.subtitleText.text = subtitle?.localized
+        self.subtitleText.adjustsFontSizeToFitWidth = true
         self.nameAnimation = nameAnimation
-        
         setupAnimation()
+        setupTitle()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
         setupTitle()
     }
     
@@ -35,29 +41,26 @@ final class BaseViewOnbording: UIViewController {
         super.viewDidLoad()
     }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        animationView.play()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        animationView.stop()
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
     }
     
     override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         view.setupLayer()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        animationView?.frame = CGRect(x: 0, y: 0, width: viewAnim.frame.width, height: viewAnim.frame.height)
     }
     
     private func setupAnimation() {
         animationView = LottieAnimationView(name: nameAnimation)
-        animationView.frame = CGRect(x: 0, y: -15, width: 360, height: 346)
-        bgImgView.center = animationView.center
-        animationView.loopMode = .loop
-        animationView.animationSpeed = 1.5
-        bgImgView.addSubview(animationView)
+        animationView?.loopMode = .loop
+        animationView?.contentMode = .scaleAspectFit
+        animationView?.animationSpeed = 1.5
+        viewAnim.addSubview(animationView!)
+        animationView?.play()
     }
     
     private func setupTitle() {
@@ -65,18 +68,30 @@ final class BaseViewOnbording: UIViewController {
             nameStone.isHidden = false
             titleOriginal.isHidden = false
             let text = subtitleText.text ?? ""
-            let attributeText = NSMutableAttributedString(string: text)
-                    
-            attributeText.addAttribute(.foregroundColor, value: R.Colors.active, range: NSRange(location: 40, length: 9))
-            subtitleText.attributedText = attributeText
+            let words = text.split(separator: " ")
+            
+            if words.count >= 2 {
+                let atributedWord = words[5]
+                
+                let attributedText = NSMutableAttributedString(string: text)
+                attributedText.addAttribute(.foregroundColor, value: R.Colors.active, range: (text as NSString).range(of: String(atributedWord)))
+                
+                subtitleText.attributedText = attributedText
+            }
         } else {
             let text = subtitleText.text ?? ""
-            let attributeText = NSMutableAttributedString(string: text)
-                    
-            attributeText.addAttribute(.foregroundColor, value: R.Colors.active, range: NSRange(location: 46, length: 5))
-            attributeText.addAttribute(.foregroundColor, value: R.Colors.active, range: NSRange(location: 20, length: 9))
-            subtitleText.attributedText = attributeText
+            let words = text.split(separator: " ")
+            
+            if words.count >= 2 {
+                let atributedWordThree = words[3]
+//                let atributedWordSeven = words[6]
+                
+                let attributedText = NSMutableAttributedString(string: text)
+                attributedText.addAttribute(.foregroundColor, value: R.Colors.active, range: (text as NSString).range(of: String(atributedWordThree)))
+                //attributedText.addAttribute(.foregroundColor, value: R.Colors.active, range: (text as NSString).range(of: String(atributedWordSeven)))
+                
+                subtitleText.attributedText = attributedText
+            }
         }
     }
-    
 }

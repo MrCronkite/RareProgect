@@ -19,6 +19,7 @@ final class StartViewController: UIViewController {
     var secondsElapsed = 0
     var appopenAD: GADAppOpenAd?
     
+    @IBOutlet weak var lableText: UILabel!
     @IBOutlet weak var imageBG: UIImageView!
     @IBOutlet weak var imageAnimated: UIImageView!
     @IBOutlet weak var viewAnimated: UIView!
@@ -30,6 +31,8 @@ final class StartViewController: UIViewController {
         setupAnimation()
         startImageAnimation()
         loadAppOpenAd()
+        lableText.text = "start_lable".localized
+        lableText.adjustsFontSizeToFitWidth = true
     }
     
     @objc func changeImage() {
@@ -42,9 +45,10 @@ final class StartViewController: UIViewController {
         
         secondsElapsed += 1
         
-        if secondsElapsed >= 8 {
+        if secondsElapsed >= 1 {
             timer?.invalidate()
-            appopenAD?.present(fromRootViewController: self)
+            dismiss(animated: true)
+            //appopenAD?.present(fromRootViewController: self)
         }
     }
     
@@ -84,7 +88,7 @@ extension StartViewController: GADFullScreenContentDelegate {
     }
     
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        dismiss(animated: true)
+        
     }
 }
 

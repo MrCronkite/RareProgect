@@ -11,7 +11,7 @@ final class OnbordingViewController: UIViewController {
     
     var currentIndex: Int = 0
     
-    let titles = ["Recognize stones and find out their estimated value", "Useful information for finding the most expensive stones", "Open up limitless possibilities"]
+    var titles: [String] = []
     let animation = ["anim01", "anim02"]
     
     let nextButton: UIButton = {
@@ -28,13 +28,15 @@ final class OnbordingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
+        titles = ["onb_sub_text_first".localized, "onb_sub_text_second".localized, "onb_sub_third".localized]
+        nextButton.setTitle("onb_free_btn".localized, for: .normal)
         setupPageViewController()
         setupView()
         let vc = StartViewController()
         vc.modalPresentationStyle = .fullScreen
         DispatchQueue.main.async {
             self.present(vc, animated: false)
+           
         }
     }
 }
@@ -47,7 +49,7 @@ extension OnbordingViewController {
         }
         
         NSLayoutConstraint.activate([
-            nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -37),
+            nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -43),
             nextButton.heightAnchor.constraint(equalToConstant: 54),
             nextButton.widthAnchor.constraint(equalToConstant: 311),
             nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)

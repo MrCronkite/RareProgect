@@ -13,6 +13,7 @@ final class GaleryViewController: UIViewController {
     
     var imageIndex = 0
     
+    @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var imgView: UIImageView!
     @IBOutlet weak var collectionImg: UICollectionView!
     
@@ -67,6 +68,7 @@ extension GaleryViewController {
         
         imgView.contentMode = .scaleAspectFill
         imgView.setupImgURL(url: photos[0].image)
+        backButton.setTitle("", for: .normal)
     }
 }
  

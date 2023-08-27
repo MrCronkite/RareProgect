@@ -13,8 +13,8 @@ final class ArticleCellView: UICollectionViewCell {
     @IBOutlet weak var titleArticle: UILabel!
     @IBOutlet weak var textArticel: UILabel!
     
-    @IBOutlet weak var titleConstraint: NSLayoutConstraint!
-    @IBOutlet weak var lableConstraint: NSLayoutConstraint!
+    @IBOutlet weak var topLabelConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomLabelConstraint: NSLayoutConstraint!
     
     override init(frame: CGRect) {
         super.init(frame: frame)

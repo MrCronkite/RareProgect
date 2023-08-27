@@ -34,20 +34,12 @@ final class NetworkClassificationImpl: NetworkClassification {
         let boundary = UUID().uuidString
         var body = Data()
         
-//        body.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-//        body.append("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".data(using: .utf8)!)
-//        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
-//        body.append(image)
-//        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
-//        
-        
         body.append("--\(boundary)\r\n".data(using: .utf8)!)
         body.append("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".data(using: .utf8)!)
         body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
         body.append(image)
         body.append("\r\n".data(using: .utf8)!)
         
-        // Заканчиваем запрос
         body.append("--\(boundary)--\r\n".data(using: .utf8)!)
         
         var request = URLRequest(url: url)
@@ -55,9 +47,8 @@ final class NetworkClassificationImpl: NetworkClassification {
         request.addValue("Token \(API.token)", forHTTPHeaderField: "Authorization")
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         request.httpBody = body
-        
+        print("request")
         let task = urlSession.dataTask(with: request) { [jsonDecoder] data, response, error in
-            print(response)
             switch (data, error) {
             case let (.some(data), nil):
                 do {

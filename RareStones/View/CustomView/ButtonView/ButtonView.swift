@@ -25,9 +25,10 @@ final class ButtonView: UIView {
     let text: UILabel = {
         let lable = UILabel()
         lable.font = UIFont.systemFont(ofSize: 17)
-        lable.text = "Recognize stone"
+        lable.text = "camera_button".localized
         lable.textColor = .white
-        lable.frame = CGRect(x: 110, y: 17, width: 127, height: 20)
+        lable.frame = CGRect(x: 110, y: 17, width: 137, height: 20)
+        lable.adjustsFontSizeToFitWidth = true
         return lable
     }()
     

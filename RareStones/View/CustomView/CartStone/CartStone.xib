@@ -15,6 +15,7 @@
                 <outlet property="imageStone" destination="5bL-mJ-fAz" id="i49-pW-TPM"/>
                 <outlet property="priceStone" destination="dNq-GY-jW9" id="LDX-zl-aSA"/>
                 <outlet property="titleStone" destination="s36-o9-GOU" id="gyO-wE-cJ4"/>
+                <outlet property="upLable" destination="2UH-vA-IoY" id="ExT-8C-4mL"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>

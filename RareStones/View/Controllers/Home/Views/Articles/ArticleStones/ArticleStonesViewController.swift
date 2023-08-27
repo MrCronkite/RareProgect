@@ -19,6 +19,10 @@ final class ArticleStonesViewController: UIViewController {
     var adBannerView: GADBannerView!
     var heightCell: [CGFloat] = []
     
+    @IBOutlet weak var subtitleLable: UILabel!
+    @IBOutlet weak var originalLable: UILabel!
+    @IBOutlet weak var fakeLable: UILabel!
+    @IBOutlet weak var buttonClose: UIButton!
     @IBOutlet weak var fakeImageView: UIImageView!
     @IBOutlet weak var boxFakeView: UIView!
     @IBOutlet weak var boxAdView: UIView!
@@ -111,6 +115,11 @@ extension ArticleStonesViewController {
         adBannerView.adUnitID = R.Strings.KeyAd.bannerAdKey
         adBannerView.rootViewController = self
         adBannerView.load(GADRequest())
+        
+        buttonClose.setTitle("", for: .normal)
+        originalLable.text = "h_article_orig".localized
+        fakeLable.text = "h_article_fake".localized
+        subtitleLable.text = "h_article_subtitle".localized
     }
     
     private func addBannerViewToView(_ adbannerView: GADBannerView) {

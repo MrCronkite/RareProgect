@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BlurViewController" customModule="RareStones" customModuleProvider="target">
             <connections>
                 <outlet property="btnGO" destination="T67-HN-u05" id="rqd-lp-IEW"/>
+                <outlet property="titleBlur" destination="bGt-mL-eQi" id="OPp-BJ-LQx"/>
                 <outlet property="view" destination="iN0-l3-epB" id="97n-9w-ztT"/>
                 <outlet property="viewAnimate" destination="AFA-VU-rPn" id="h2v-sO-Bgi"/>
             </connections>

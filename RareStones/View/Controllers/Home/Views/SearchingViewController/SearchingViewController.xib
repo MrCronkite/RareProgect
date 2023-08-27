@@ -13,11 +13,13 @@
             <connections>
                 <outlet property="azButton" destination="pQI-t4-IIN" id="YnX-QC-Wgr"/>
                 <outlet property="boxAdView" destination="e5T-fP-DWS" id="Fh2-1Z-hqw"/>
+                <outlet property="buttonClose" destination="XTs-Ch-88c" id="KMv-9D-U7c"/>
                 <outlet property="priceButton" destination="1ph-ve-sRB" id="Cg7-4i-XFl"/>
                 <outlet property="priceLowButton" destination="SvP-eI-5o5" id="5fs-Pq-NfX"/>
                 <outlet property="stoneColectionView" destination="Jhh-7c-4rO" id="mM8-fb-vGv"/>
                 <outlet property="textFiledSearch" destination="L0O-7t-FEk" id="5h0-DV-iG5"/>
                 <outlet property="view" destination="iN0-l3-epB" id="fnQ-AD-6ee"/>
+                <outlet property="viewButtonAnimated" destination="IEi-nX-MSW" id="QWi-5F-09q"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -97,6 +99,14 @@
                         <constraint firstAttribute="height" constant="104" id="OqS-uX-7Xx"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IEi-nX-MSW">
+                    <rect key="frame" x="41" y="684" width="311" height="54"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="311" id="34z-XA-Az3"/>
+                        <constraint firstAttribute="height" constant="54" id="IuK-RB-DUA"/>
+                    </constraints>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -104,6 +114,7 @@
                 <constraint firstItem="e5T-fP-DWS" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="1Pf-DM-mnN"/>
                 <constraint firstItem="pQI-t4-IIN" firstAttribute="top" secondItem="L0O-7t-FEk" secondAttribute="bottom" constant="16" id="7FY-uH-Bcp"/>
                 <constraint firstItem="1ph-ve-sRB" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="AKD-O3-Vy5"/>
+                <constraint firstItem="IEi-nX-MSW" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="Bra-HR-vDw"/>
                 <constraint firstItem="Jhh-7c-4rO" firstAttribute="top" secondItem="pQI-t4-IIN" secondAttribute="bottom" constant="20" id="IhU-tt-8gh"/>
                 <constraint firstItem="SvP-eI-5o5" firstAttribute="top" secondItem="L0O-7t-FEk" secondAttribute="bottom" constant="16" id="Iyb-3V-F4y"/>
                 <constraint firstItem="L0O-7t-FEk" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="OaR-3P-3lq"/>
@@ -117,6 +128,7 @@
                 <constraint firstItem="L0O-7t-FEk" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="fDm-yq-EnR"/>
                 <constraint firstItem="SvP-eI-5o5" firstAttribute="leading" secondItem="1ph-ve-sRB" secondAttribute="trailing" constant="16" id="hE4-cI-nMP"/>
                 <constraint firstItem="1ph-ve-sRB" firstAttribute="top" secondItem="L0O-7t-FEk" secondAttribute="bottom" constant="16" id="jaH-oe-5CF"/>
+                <constraint firstItem="e5T-fP-DWS" firstAttribute="top" secondItem="IEi-nX-MSW" secondAttribute="bottom" constant="10" id="lMk-eu-otE"/>
                 <constraint firstItem="XTs-Ch-88c" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="qFf-vs-RIc"/>
             </constraints>
             <point key="canvasLocation" x="130.53435114503816" y="-12.67605633802817"/>

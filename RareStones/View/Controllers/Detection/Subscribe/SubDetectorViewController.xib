@@ -13,8 +13,11 @@
             <connections>
                 <outlet property="btnSub" destination="gVK-jM-Ey8" id="BGW-cJ-vFb"/>
                 <outlet property="btnWatch" destination="dED-bL-orc" id="26L-Jk-YSn"/>
+                <outlet property="closeButton" destination="kof-Ob-FxY" id="Rq3-V3-MxR"/>
                 <outlet property="imgViewBg" destination="XFG-2q-wMN" id="8yA-Pd-hst"/>
                 <outlet property="separator" destination="44X-mV-vvl" id="F3q-r5-Ypn"/>
+                <outlet property="subtitle" destination="QUf-rt-vGv" id="sAx-26-lqR"/>
+                <outlet property="titleLable" destination="geF-YQ-Q4b" id="2fD-EI-OCw"/>
                 <outlet property="view" destination="iN0-l3-epB" id="BsK-7y-ZiU"/>
             </connections>
         </placeholder>
@@ -95,10 +98,9 @@
                         <action selector="watchAd:" destination="-1" eventType="touchUpInside" id="0qM-1D-Ocw"/>
                     </connections>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use the feature for viewing ads or get full access to all of the features for a subscription" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUf-rt-vGv">
-                    <rect key="frame" x="35.666666666666657" y="514" width="343" height="38"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use the feature for viewing ads or get full access to all of the features for a subscription" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUf-rt-vGv">
+                    <rect key="frame" x="35.666666666666657" y="516" width="343" height="36"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="38" id="9Zz-JS-tEh"/>
                         <constraint firstAttribute="width" constant="343" id="es8-Hm-wbJ"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -106,7 +108,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Try detection" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="geF-YQ-Q4b">
-                    <rect key="frame" x="152.33333333333334" y="487.33333333333331" width="109.33333333333334" height="21.666666666666686"/>
+                    <rect key="frame" x="152.33333333333334" y="489.33333333333331" width="109.33333333333334" height="21.666666666666686"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
                     <color key="textColor" red="0.29429510240000001" green="0.27762299779999999" blue="0.3176518679" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <nil key="highlightedColor"/>

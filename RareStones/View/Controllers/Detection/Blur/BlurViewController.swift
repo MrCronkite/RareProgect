@@ -13,6 +13,7 @@ final class BlurViewController: UIViewController {
     
     @IBOutlet weak var btnGO: UIButton!
     
+    @IBOutlet weak var titleBlur: UILabel!
     @IBOutlet weak var viewAnimate: UIView!
     
     override func viewDidLoad() {
@@ -41,5 +42,8 @@ final class BlurViewController: UIViewController {
         viewAnimate.addSubview(animationView)
         
         animationView.play()
+        titleBlur.text = "detect_alert_text".localized
+        titleBlur.adjustsFontSizeToFitWidth = true
+        btnGO.setTitle("detect_btn_go".localized, for: .normal)
     }
 }

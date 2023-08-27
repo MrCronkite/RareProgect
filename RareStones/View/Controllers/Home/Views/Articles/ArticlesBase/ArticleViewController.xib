@@ -13,10 +13,12 @@
             <connections>
                 <outlet property="bottomAnchor" destination="Usj-z8-oRN" id="WZZ-CL-0jd"/>
                 <outlet property="boxAdView" destination="EsR-Jl-dqd" id="c6q-3E-Wew"/>
+                <outlet property="closeButton" destination="ON7-AA-B8g" id="JDX-Ke-r1Q"/>
                 <outlet property="collectionArticle" destination="JPi-ir-ypE" id="S7U-ch-H5z"/>
                 <outlet property="collectionHeight" destination="RMj-77-9jS" id="jwN-rK-X0m"/>
                 <outlet property="collectionStones" destination="RU1-aS-gs4" id="ob7-VX-2bz"/>
                 <outlet property="imgView" destination="4gJ-yj-5HH" id="Eyo-T9-wDY"/>
+                <outlet property="mentionsLable" destination="wVx-wQ-sSU" id="LCh-DY-J3u"/>
                 <outlet property="titleMainText" destination="11t-HB-Pp5" id="d9w-9Q-sg3"/>
                 <outlet property="titleMentions" destination="wVx-wQ-sSU" id="48Z-jd-nO4"/>
                 <outlet property="view" destination="iN0-l3-epB" id="D5e-vb-bad"/>

@@ -20,12 +20,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         window?.rootViewController = TabBarController()
         window?.makeKeyAndVisible()
+        
+        if #available(iOS 13.0, *) {
+            UIApplication.shared.statusBarStyle = .darkContent
+        }
     }
     
     func sceneDidBecomeActive(_ scene: UIScene) {
         if let lastActiveViewController = lastActiveViewController {
             //appopenAD?.present(fromRootViewController: lastActiveViewController)
-            print("Last active view controller: \(lastActiveViewController)")
         }
     }
     
@@ -40,7 +43,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func loadAppOpenAd(){
-        GADAppOpenAd.load(withAdUnitID: "ca-app-pub-3940256099942544/4411468910",
+        GADAppOpenAd.load(withAdUnitID: R.Strings.KeyAd.appOpenAdKey,
                           request: GADRequest()) { ad, error in
             if let error = error {
                 return print("Failed to load rewarded interstitial ad with error: \(error.localizedDescription)")

@@ -16,6 +16,10 @@ final class SearchingViewController: UIViewController {
     var filteredItems: [Element] = []
     
     var adBannerView: GADBannerView!
+    let buttonViewAnimate = ButtonView()
+    
+    @IBOutlet weak var buttonClose: UIButton!
+    @IBOutlet weak var viewButtonAnimated: UIView!
     @IBOutlet weak var boxAdView: UIView!
     @IBOutlet weak var textFiledSearch: UITextField!
     @IBOutlet weak var azButton: UIButton!
@@ -120,7 +124,7 @@ extension SearchingViewController {
         stoneColectionView.showsVerticalScrollIndicator = false
         stoneColectionView.backgroundColor = UIColor.clear
         stoneColectionView.collectionViewLayout = layout
-        
+        stoneColectionView.contentInset = .init(top: 0, left: 0, bottom: 130, right: 0)
         stoneColectionView.dataSource = self
         stoneColectionView.register(StoneCollectionViewCell.self, forCellWithReuseIdentifier: "StoneCollectionViewCell")
         
@@ -132,6 +136,24 @@ extension SearchingViewController {
         adBannerView.adUnitID = R.Strings.KeyAd.bannerAdKey
         adBannerView.rootViewController = self
         adBannerView.load(GADRequest())
+        
+        viewButtonAnimated.layer.cornerRadius = 25
+        viewButtonAnimated.backgroundColor = .clear
+        buttonViewAnimate.delegate = self
+        viewButtonAnimated.frame = buttonViewAnimate.frame
+        buttonViewAnimate.setupAnimation()
+        viewButtonAnimated.addSubview(buttonViewAnimate)
+        viewButtonAnimated.layer.shadowColor = UIColor.black.cgColor
+        viewButtonAnimated.layer.shadowOpacity = 0.3
+        viewButtonAnimated.layer.shadowOffset = CGSize(width: 0, height: 10)
+        viewButtonAnimated.layer.shadowRadius = 10
+        
+        buttonClose.setTitle("", for: .normal)
+        priceLowButton.setTitle("h_search_high".localized, for: .normal)
+        priceLowButton.titleLabel?.textAlignment = .center
+        priceButton.titleLabel?.textAlignment = .center
+        priceButton.setTitle("h_search_low".localized, for: .normal)
+        textFiledSearch.placeholder = "h_search_field".localized
     }
     
     private func addBannerViewToView(_ adbannerView: GADBannerView) {
@@ -183,6 +205,14 @@ extension SearchingViewController {
     }
 }
 
+extension SearchingViewController: ButtonViewDelegate {
+    func showCamera() {
+        let vc = CameraViewController()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true)
+    }
+}
+
 extension SearchingViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         filteredItems.count
@@ -192,7 +222,7 @@ extension SearchingViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StoneCollectionViewCell", for: indexPath) as! StoneCollectionViewCell
         cell.cellView.titleStone.text = filteredItems[indexPath.row].name
         cell.cellView.imageStone.sd_setImage(with: URL(string: filteredItems[indexPath.row].image ))
-        cell.cellView.priceStone.text = "\(filteredItems[indexPath.row].pricePerCaratTo?.remove$() ?? "0") / crt"
+        cell.cellView.priceStone.text = "\(filteredItems[indexPath.row].pricePerCaratTo?.remove$() ?? "0") / ct"
         cell.cellView.id = filteredItems[indexPath.row].id
         cell.cellView.delegate = self
         cell.cellView.isButtonSelected = filteredItems[indexPath.row].isFavorite

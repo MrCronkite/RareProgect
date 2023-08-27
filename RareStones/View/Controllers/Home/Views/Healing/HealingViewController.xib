@@ -11,7 +11,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HealingViewController" customModule="RareStones" customModuleProvider="target">
             <connections>
+                <outlet property="backButton" destination="KwI-34-6ka" id="R2n-W1-6bo"/>
+                <outlet property="buttonContainer" destination="0NH-7J-Bx9" id="ZZc-ae-iiS"/>
                 <outlet property="collectionViewHealing" destination="3YS-DY-yG2" id="jmW-Rv-Yzp"/>
+                <outlet property="titleHealing" destination="xqB-xI-z43" id="CFg-qM-SfS"/>
                 <outlet property="view" destination="iN0-l3-epB" id="ZAm-wj-3AR"/>
             </connections>
         </placeholder>
@@ -35,7 +38,7 @@
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Healing stones" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xqB-xI-z43">
                     <rect key="frame" x="134.66666666666666" y="71" width="123.99999999999997" height="22"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
-                    <color key="textColor" red="0.12754667650000001" green="0.085749556820000003" blue="0.04789505568" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <color key="textColor" red="0.29429510240000001" green="0.27762299779999999" blue="0.3176518679" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="3YS-DY-yG2">
@@ -51,14 +54,24 @@
                         <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                     </collectionViewFlowLayout>
                 </collectionView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0NH-7J-Bx9">
+                    <rect key="frame" x="41" y="748" width="311" height="54"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="54" id="4hT-Xw-dzt"/>
+                        <constraint firstAttribute="width" constant="311" id="P4z-17-HbX"/>
+                    </constraints>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="3YS-DY-yG2" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="82p-Eh-BEt"/>
                 <constraint firstItem="KwI-34-6ka" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="4" id="Gc6-FW-Q7y"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="0NH-7J-Bx9" secondAttribute="bottom" constant="16" id="J2G-g6-Cbc"/>
                 <constraint firstItem="xqB-xI-z43" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="Ut4-LJ-3sH"/>
                 <constraint firstItem="KwI-34-6ka" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="XfA-O1-xXg"/>
+                <constraint firstItem="0NH-7J-Bx9" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="Z1S-Cp-nVN"/>
                 <constraint firstAttribute="bottom" secondItem="3YS-DY-yG2" secondAttribute="bottom" id="uIE-LH-LHp"/>
                 <constraint firstItem="3YS-DY-yG2" firstAttribute="top" secondItem="xqB-xI-z43" secondAttribute="bottom" constant="20" id="vcU-p9-Kj9"/>
                 <constraint firstItem="xqB-xI-z43" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="12" id="xpA-C0-Sn5"/>

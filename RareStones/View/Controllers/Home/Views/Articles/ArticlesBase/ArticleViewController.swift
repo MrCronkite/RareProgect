@@ -19,13 +19,14 @@ final class ArticleViewController: UIViewController {
     var adBannerView: GADBannerView!
     var heightCell: [CGFloat] = []
     
+    @IBOutlet weak var mentionsLable: UILabel!
+    @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var titleMentions: UILabel!
     @IBOutlet weak var bottomAnchor: NSLayoutConstraint!
     @IBOutlet weak var collectionHeight: NSLayoutConstraint!
     @IBOutlet weak var collectionArticle: UICollectionView!
     @IBOutlet weak var titleMainText: UILabel!
     @IBOutlet weak var imgView: UIImageView!
-//    @IBOutlet weak var scrolView: UIScrollView!
     
     @IBOutlet weak var boxAdView: UIView!
     @IBOutlet weak var collectionStones: UICollectionView!
@@ -79,6 +80,8 @@ extension ArticleViewController {
         adBannerView.adUnitID = R.Strings.KeyAd.bannerAdKey
         adBannerView.rootViewController = self
         adBannerView.load(GADRequest())
+        closeButton.setTitle("", for: .normal)
+        mentionsLable.text = "h_article_mentions".localized
     }
     
     private func getArticleById() {
@@ -147,17 +150,16 @@ extension ArticleViewController: UICollectionViewDataSource {
         case collectionArticle :
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(ArticleCellView.self)", for: indexPath) as? ArticleCellView else { return UICollectionViewCell() }
             if parts[indexPath.row].image == nil && parts[indexPath.row].title != nil {
-                cell.titleConstraint.constant = 0
-                cell.lableConstraint.constant = 30
+                cell.bottomLabelConstraint.constant = 0
                 cell.imageViewArticle.isHidden = true
             } else if parts[indexPath.row].title == nil && parts[indexPath.row].image == nil {
                 cell.imageViewArticle.isHidden = true
                 cell.titleArticle.isHidden = true
-                cell.lableConstraint.constant = 0
-                cell.titleConstraint.constant = 0
+                cell.bottomLabelConstraint.constant = 0
+                cell.topLabelConstraint.constant = 0
             } else if parts[indexPath.row].title == nil {
                 cell.titleArticle.isHidden = true
-                cell.lableConstraint.constant = 185
+                cell.topLabelConstraint.constant = 0
             }
             cell.imageViewArticle.setupImgURL(url: parts[indexPath.row].image ?? "")
             cell.textArticel.text = parts[indexPath.row].text

@@ -12,7 +12,7 @@ import CoreLocation
 final class DetectionViewController: UIViewController{
     
     var percent = 0
-    var isAdViewed = true
+    var isAdViewed = false
     let motionManager = CMMotionManager()
     
     @IBOutlet weak var lableSubtitle: UILabel!
@@ -31,6 +31,7 @@ final class DetectionViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        localiz()
     }
     
     override func viewWillLayoutSubviews() {
@@ -39,7 +40,6 @@ final class DetectionViewController: UIViewController{
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        print(isAdViewed)
         isAdViewed = false
         motionManager.stopMagnetometerUpdates()
     }
@@ -61,20 +61,27 @@ final class DetectionViewController: UIViewController{
             motionManager.startMagnetometerUpdates(to: OperationQueue.main) { (magnetometerData, error) in
                 if let data = magnetometerData {
                     let magneticField = data.magneticField
-                    let magneticFieldY = abs(magneticField.y)
-                    self.percent = Int(magneticFieldY)
-                    if magneticFieldY >= 0 && magneticFieldY <= 100 {
-                        self.handleReceivedValue(magneticFieldY)
-                        self.lableText.text = "\(Int(magneticFieldY))%"
-                    } else if magneticFieldY > 100 {
-                        self.lableText.text = "100%"
-                        self.handleReceivedValue(100)
-                    }
+                    let magneticFieldY = abs(magneticField.x / 10 - 10)
+                    let clampedValue = min(100, max(0, magneticFieldY))
+                    
+                    self.percent = Int(clampedValue)
+                    self.handleReceivedValue(clampedValue)
+                    self.lableText.text = "\(Int(clampedValue))%"
                 }
             }
         } else {
             alert()
         }
+    }
+    
+    private func localiz() {
+        lableSubtitle.text = "detect_sub_text".localized
+        lableSubtitle.adjustsFontSizeToFitWidth = true
+        subtitle1.text = "detect_first_text".localized
+        subtitle2.text = "detect_second_text".localized
+        subtitle3.text = "detect_therd_text".localized
+        btnStart.setTitle("detect_btn_start".localized, for: .normal)
+        
     }
 }
 
@@ -94,6 +101,8 @@ extension DetectionViewController {
         [subtitle1, subtitle2, subtitle3].forEach {
             $0?.greyColor()
         }
+        
+        navigationController?.navigationBar.isHidden = true
     }
     
     private func alert() {

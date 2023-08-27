@@ -29,21 +29,39 @@ enum R {
         enum TabBar {
             static func title(for tab: Tabs) -> String {
                 switch tab {
-                case .home : return "Home"
-                case .detection : return "Detection"
-                case .collection : return "History"
-                case .aihelper : return "Ai Helper"
+                case .home : return "tab_home".localized
+                case .detection : return "tab_detection".localized
+                case .collection : return "tab_history".localized
+                case .aihelper : return "tab_Ai_helper".localized
                 }
             }
         }
         enum Camera {
-            static let loadingText = ["Looking for a match", "Preparing a description", "Determine the cost per carat"]
+            static let loadingText = ["cam_pt_looking_1".localized, "cam_pt_looking_2".localized, "cam_pt_looking_3".localized]
+            static let styles: [UIBlurEffect.Style] = [.dark, .extraLight, .prominent, .systemChromeMaterial, .systemThinMaterialLight, .systemMaterial, .systemUltraThinMaterialDark, .regular, .systemChromeMaterial, .systemUltraThinMaterialLight]
         }
+        
+        enum AiHelper {
+            static let message = "helper_mess".localized
+            static var questions = ["helper_question1".localized,
+                                    "helper_question2".localized,
+                                    "helper_question3".localized]
+        }
+        
         enum KeyAd {
             static let bannerAdKey = "ca-app-pub-3940256099942544/2934735716"
+            static let rewardedInterKey = "ca-app-pub-3940256099942544/6978759866"
+            static let appOpenAdKey = "ca-app-pub-3940256099942544/4411468910"
+            static let interKey = "ca-app-pub-3940256099942544/4411468910"
         }
+        
         enum KeyUserDefaults {
             static let token = "TokenKey"
+        }
+         
+        enum Links {
+            static let privacy = "https://ai-stones.com/privacy.html"
+            static let terms = "https://ai-stones.com/terms.html"
         }
     }
     

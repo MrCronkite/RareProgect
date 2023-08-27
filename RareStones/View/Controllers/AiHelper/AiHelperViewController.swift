@@ -14,14 +14,13 @@ final class AiHelperViewController: UIViewController {
     var messagesBot: [MessageElement] = []
     var counter = 0
     
-    var messages = ["Tell me interesting facts about rocks. What stones can be found in my country?", "Which stones are the most expensive in the world?", "What are the most popular stones to buy?"]
-    
     let tintImgInactive = UIImage(named: "send")?.withTintColor(R.Colors.purple)
     let tintImgActive = UIImage(named: "send")?.withTintColor(R.Colors.roseBtn)
     
     var lastViewBottomAnchor: NSLayoutYAxisAnchor?
     @IBOutlet weak var scrollHigh: NSLayoutConstraint!
-    
+    @IBOutlet weak var getPremiumLable: UILabel!
+    @IBOutlet weak var subtitle: UILabel!
     @IBOutlet weak var collectionHeight: NSLayoutConstraint!
     @IBOutlet weak var header: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
@@ -35,13 +34,14 @@ final class AiHelperViewController: UIViewController {
     @IBOutlet weak var scrollView: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        localize()
         setupView()
         responseMessage(below: avatar.bottomAnchor)
+        btnSend.setImage(tintImgInactive, for: .normal)
+        
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
     }
     
     override func viewDidLayoutSubviews() {
@@ -75,40 +75,6 @@ final class AiHelperViewController: UIViewController {
         }
         messageTxtField.text = ""
     }
-    
-    @IBAction func getPremium(_ sender: Any) {
-        let vc = StartFreeViewController()
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: true)
-    }
-    
-    @objc func handleTap() {
-        view.endEditing(true)
-    }
-    
-    @objc func keyboardWillShow(_ notification: Notification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let bottomInset = keyboardSize.height
-            
-            bottomConstraint.constant = bottomInset-85
-            UIView.animate(withDuration: 0.3) {
-                self.view.layoutIfNeeded()
-            }
-        }
-    }
-    
-    @objc func keyboardWillHide(_ notification: Notification) {
-        bottomConstraint.constant = 0
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    @objc func clearTextField() {
-        messageTxtField.text = ""
-        updateButtonColor(text: "")
-        textFieldDidChange(messageTxtField)
-    }
 }
 
 extension AiHelperViewController {
@@ -129,7 +95,7 @@ extension AiHelperViewController {
         messageTxtField.borderStyle = .none
         messageTxtField.layer.cornerRadius = 10
         messageTxtField.tintColor = .gray
-        messageTxtField.attributedPlaceholder = NSAttributedString(string: "Message", attributes: placeholderAttributes)
+        messageTxtField.attributedPlaceholder = NSAttributedString(string: "helper_playceholder".localized, attributes: placeholderAttributes)
         messageTxtField.textColor = .black
         messageTxtField.delegate = self
         
@@ -148,6 +114,11 @@ extension AiHelperViewController {
         header.layer.shadowOpacity = 0.1
         header.layer.shadowOffset = CGSize(width: 0, height: 4)
         header.layer.shadowRadius = 1
+        navigationController?.navigationBar.isHidden = true
+        
+        let tapPremium = UITapGestureRecognizer(target: self, action: #selector(getPremium))
+        getPremiumLable.addGestureRecognizer(tapPremium)
+        getPremiumLable.isUserInteractionEnabled = true
     }
     
     func btnCloseText() {
@@ -163,18 +134,13 @@ extension AiHelperViewController {
         messageTxtField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
     
-    @objc func textFieldDidChange(_ textField: UITextField) {
-        if let clearButton = (textField.rightView)?.subviews.first as? UIButton {
-            clearButton.isHidden = textField.text?.isEmpty ?? true
-        }
-    }
-    
     func createTextViewWithText(_ text: String, below anchor: NSLayoutYAxisAnchor?) {
         let textView = CustomRoundedTextView()
         textView.text = text
         textView.isEditable = false
         textView.textAlignment = .left
         textView.backgroundColor = UIColor(hexString: "#BD82FF")
+        textView.textColor = .white
         textView.font = UIFont.systemFont(ofSize: 16)
         textView.isScrollEnabled = false
         textView.translatesAutoresizingMaskIntoConstraints = false
@@ -206,7 +172,6 @@ extension AiHelperViewController {
         textViewReq.translatesAutoresizingMaskIntoConstraints = false
         textViewReq.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         textViewReq.sizeToFit()
-        
         scrollView.addSubview(textViewReq)
         
         NSLayoutConstraint.activate([
@@ -216,9 +181,8 @@ extension AiHelperViewController {
         ])
         
         lastViewBottomAnchor = textViewReq.bottomAnchor
-        
         if self.messagesBot.count == 0 {
-            textViewReq.text = "Hi, welcome to The Stone Recognizer. I'm your cheerful sidekick - the gnome Doc 👋 You can always contact me with a question related to stones, crystals and minerals. I am a real expert in this business. You can find out more about how I can be helpful in the tips💡 What would you like to know about?"
+            textViewReq.text = R.Strings.AiHelper.message
         } else if self.messagesBot.count == 2 {
             textViewReq.text = self.messagesBot[1].text
             let bottomOffset = CGPoint(x: 0, y: calculateNewInnerViewHeight()-100)
@@ -226,16 +190,15 @@ extension AiHelperViewController {
         }
         
         btnSend.isEnabled = true
-        btnSend.setImage(tintImgActive, for: .normal)
     }
     
     func calculateNewInnerViewHeight() -> CGFloat {
-            var totalHeight: CGFloat = 0
-            for subview in scrollView.subviews {
-                totalHeight += subview.intrinsicContentSize.height
-            }
-            return totalHeight
+        var totalHeight: CGFloat = 0
+        for subview in scrollView.subviews {
+            totalHeight += subview.intrinsicContentSize.height
         }
+        return totalHeight
+    }
     
     func responseLoadMessage(below anchor: NSLayoutYAxisAnchor?) {
         let textViewReq = CustomRequestTextView()
@@ -272,7 +235,7 @@ extension AiHelperViewController {
         }
     }
     
-    func getMessage() {
+    private func getMessage() {
         networkChat.getMessage(id: idMess) { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -289,6 +252,52 @@ extension AiHelperViewController {
             }
         }
     }
+    
+    private func localize() {
+        btnSend.setTitle("", for: .normal)
+        subtitle.text = "helper_subtitle".localized
+        getPremiumLable.text = "helper_button_premium".localized
+    }
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        if let clearButton = (textField.rightView)?.subviews.first as? UIButton {
+            clearButton.isHidden = textField.text?.isEmpty ?? true
+        }
+    }
+    
+    @objc func getPremium() {
+        let vc = GetPremiumViewController()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true)
+    }
+    
+    @objc func handleTap() {
+        view.endEditing(true)
+    }
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let bottomInset = keyboardSize.height
+            
+            bottomConstraint.constant = bottomInset - (self.tabBarController?.tabBar.frame.height)!
+            UIView.animate(withDuration: 0.4) {
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(_ notification: Notification) {
+        bottomConstraint.constant = 0
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc func clearTextField() {
+        messageTxtField.text = ""
+        updateButtonColor(text: "")
+        textFieldDidChange(messageTxtField)
+    }
 }
 
 extension AiHelperViewController: MessageCellDelegate {
@@ -296,11 +305,11 @@ extension AiHelperViewController: MessageCellDelegate {
         btnCloseText()
         messageTxtField.text = text
         btnSend.setImage(tintImgActive, for: .normal)
-        if let index = messages.firstIndex(of: text) {
-            messages.remove(at: index)
+        if let index = R.Strings.AiHelper.questions.firstIndex(of: text) {
+            R.Strings.AiHelper.questions.remove(at: index)
         }
         messageCollection.reloadData()
-        if messages.count == 0 {
+        if R.Strings.AiHelper.questions.count == 0 {
             collectionHeight.constant = 0
             messageCollection.isHidden = true
         }
@@ -309,7 +318,7 @@ extension AiHelperViewController: MessageCellDelegate {
 
 extension AiHelperViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        messages.count
+        R.Strings.AiHelper.questions.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -317,7 +326,7 @@ extension AiHelperViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         cell.delegate = self
-        cell.viewTextCell.text = messages[indexPath.row]
+        cell.viewTextCell.text = R.Strings.AiHelper.questions[indexPath.row]
         return cell
     }
 }

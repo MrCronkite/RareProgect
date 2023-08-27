@@ -20,6 +20,10 @@ final class CartStoneViewController: UIViewController {
 
     var isButtonSelected = false
     
+    @IBOutlet weak var colorLable: UILabel!
+    @IBOutlet weak var hardnessLable: UILabel!
+    @IBOutlet weak var formulaLable: UILabel!
+    @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var titleArticle: UILabel!
     @IBOutlet weak var articleTableView: UITableView!
     @IBOutlet weak var collectionDescription: UICollectionView!
@@ -44,6 +48,7 @@ final class CartStoneViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        localize()
         getDataStone()
     }
     
@@ -190,6 +195,27 @@ extension CartStoneViewController {
             }
         }
     }
+    
+    private func setupLocaliz() {
+        btnHeart.setTitle("", for: .normal)
+    }
+    
+    private func localize() {
+        backButton.setTitle("", for: .normal)
+        btnHeart.setTitle("", for: .normal)
+        btnSeeAll.setTitle("cart_see_all".localized, for: .normal)
+        formulaLable.text = "cart_formula".localized
+        formulaLable.adjustsFontSizeToFitWidth = true
+        hardnessLable.text = "cart_hardness".localized
+        hardnessLable.adjustsFontSizeToFitWidth = true
+        colorLable.text = "cart_colors".localized
+        colorLable.adjustsFontSizeToFitWidth = true
+        rareTeg.text = "cart_tag_rare".localized
+        rareTeg.adjustsFontSizeToFitWidth = true
+        healingTeg.text = "cart_tag_healing".localized
+        healingTeg.adjustsFontSizeToFitWidth = true
+        titleArticle.text = "cart_title_article".localized
+    }
 }
 
 extension CartStoneViewController: UITableViewDataSource {
@@ -224,7 +250,6 @@ extension CartStoneViewController: UICollectionViewDataSource, UICollectionViewD
         let cellWidth = collectionView.frame.width - 32
         let height = TipsStoneCell.calculateCellHeight(for: item, width: cellWidth) + 50
         heightCell.append(height)
-        print(height)
         if titleDiscription.count == heightCell.count { calculateCollectionHeight() }
         return CGSize(width: cellWidth, height: height)
     }
@@ -243,9 +268,9 @@ extension CartStoneViewController: UICollectionViewDataSource, UICollectionViewD
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(TipsStoneCell.self)" , for: indexPath) as? TipsStoneCell else { return UICollectionViewCell() }
             cell.text.text = titleDiscription[indexPath.row]
             if indexPath.row == 0 {
-                cell.titleCell.text = "Description"
+                cell.titleCell.text = "cart_description".localized
             } else {
-                cell.titleCell.text = "Healing risks"
+                cell.titleCell.text = "cart_healing".localized
             }
             return cell
         case collectionImgStone:

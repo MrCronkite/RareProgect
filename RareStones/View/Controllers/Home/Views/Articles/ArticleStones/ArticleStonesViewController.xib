@@ -15,13 +15,17 @@
                 <outlet property="boxAdView" destination="A5h-u1-wN9" id="Xe2-Cw-QL3"/>
                 <outlet property="boxFakeView" destination="Rcr-wJ-R3H" id="BVI-Yf-W92"/>
                 <outlet property="boxTxt" destination="Gp3-NI-KLG" id="WYM-Lz-oho"/>
+                <outlet property="buttonClose" destination="dll-lq-Jch" id="MPh-12-Csb"/>
                 <outlet property="collectionArticles" destination="tGY-sf-IPH" id="hGK-BV-tuq"/>
                 <outlet property="collectionHeight" destination="bm9-vP-nYd" id="5Ep-cu-Jmg"/>
                 <outlet property="contentView" destination="SoR-Fe-cdf" id="Cj1-N6-kUb"/>
                 <outlet property="fakeImageView" destination="de6-gL-akc" id="YS8-ei-tbU"/>
+                <outlet property="fakeLable" destination="hUW-nN-TbI" id="fmR-pb-CqH"/>
                 <outlet property="imgStone" destination="202-UA-Lvb" id="Fvh-mm-7dK"/>
+                <outlet property="originalLable" destination="EL1-xx-U6x" id="JlF-yJ-Wvx"/>
                 <outlet property="scrolView" destination="3xm-NH-ud6" id="KEc-A1-uiF"/>
                 <outlet property="separator" destination="c4H-v0-ls7" id="XES-ag-EnO"/>
+                <outlet property="subtitleLable" destination="yfL-b2-wwP" id="mNa-PA-urR"/>
                 <outlet property="titleText" destination="tJY-jB-4r5" id="iOg-1d-UxW"/>
                 <outlet property="view" destination="iN0-l3-epB" id="LpL-m2-xFf"/>
             </connections>
@@ -147,7 +151,6 @@
                                 <constraint firstItem="pbg-Bc-4aX" firstAttribute="leading" secondItem="SoR-Fe-cdf" secondAttribute="leading" constant="16" id="1eJ-jm-efn"/>
                                 <constraint firstItem="tGY-sf-IPH" firstAttribute="leading" secondItem="SoR-Fe-cdf" secondAttribute="leading" constant="16" id="7La-rl-eI7"/>
                                 <constraint firstAttribute="trailing" secondItem="tGY-sf-IPH" secondAttribute="trailing" constant="16" id="7Tz-Sy-jet"/>
-                                <constraint firstAttribute="width" constant="414" id="Akb-DN-NYm"/>
                                 <constraint firstItem="pbg-Bc-4aX" firstAttribute="top" secondItem="202-UA-Lvb" secondAttribute="bottom" constant="24" id="P76-rG-3kE"/>
                                 <constraint firstAttribute="trailing" secondItem="de6-gL-akc" secondAttribute="trailing" constant="16" id="Qs9-s3-Onr"/>
                                 <constraint firstItem="Gp3-NI-KLG" firstAttribute="top" secondItem="SoR-Fe-cdf" secondAttribute="top" constant="16" id="SeS-oo-TKB"/>
@@ -165,9 +168,9 @@
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="SoR-Fe-cdf" secondAttribute="bottom" constant="10" id="Eq7-0U-fAK"/>
-                        <constraint firstItem="SoR-Fe-cdf" firstAttribute="leading" secondItem="3xm-NH-ud6" secondAttribute="leading" id="G2Q-m0-9yu"/>
-                        <constraint firstAttribute="trailing" secondItem="SoR-Fe-cdf" secondAttribute="trailing" id="JKC-Yd-O2a"/>
+                        <constraint firstAttribute="trailing" secondItem="SoR-Fe-cdf" secondAttribute="trailing" id="ReJ-p4-L5M"/>
                         <constraint firstItem="SoR-Fe-cdf" firstAttribute="top" secondItem="3xm-NH-ud6" secondAttribute="top" id="b7g-4e-VYx"/>
+                        <constraint firstItem="SoR-Fe-cdf" firstAttribute="leading" secondItem="3xm-NH-ud6" secondAttribute="leading" id="hga-Lx-Vn0"/>
                     </constraints>
                 </scrollView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A5h-u1-wN9">
@@ -189,6 +192,7 @@
                 <constraint firstItem="yfL-b2-wwP" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="hQG-7H-sT8"/>
                 <constraint firstItem="3xm-NH-ud6" firstAttribute="top" secondItem="yfL-b2-wwP" secondAttribute="bottom" constant="8" id="hgT-21-aXn"/>
                 <constraint firstAttribute="bottom" secondItem="A5h-u1-wN9" secondAttribute="bottom" id="htn-bY-Tg7"/>
+                <constraint firstItem="SoR-Fe-cdf" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="jeS-3g-aka"/>
                 <constraint firstItem="yfL-b2-wwP" firstAttribute="top" secondItem="tJY-jB-4r5" secondAttribute="bottom" id="kjs-uB-Rme"/>
                 <constraint firstItem="A5h-u1-wN9" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="m9v-az-xlc"/>
                 <constraint firstItem="3xm-NH-ud6" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="oW9-Lt-9wz"/>

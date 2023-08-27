@@ -4,5 +4,6 @@ target 'RareStones' do
  pod 'lottie-ios' 
  pod 'SDWebImage'
  pod 'Google-Mobile-Ads-SDK'
+ pod 'AppsFlyerFramework'
 
 end

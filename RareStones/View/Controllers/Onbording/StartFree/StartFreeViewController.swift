@@ -15,44 +15,40 @@ protocol StartFreeViewControllerDelegate: AnyObject {
 
 final class StartFreeViewController: UIViewController {
     
-    private var rewardedInterstitialAd: GADRewardedInterstitialAd?
+    var animation: LottieAnimationView?
+    let pulseLayer = CALayer()
+    weak var delegate: StartFreeViewControllerDelegate?
+    private var interstitial: GADInterstitialAd?
     
+    @IBOutlet weak var viewAnimateContainer: UIView!
     @IBOutlet weak var privatePolTxt: UILabel!
     @IBOutlet weak var restoreTxt: UILabel!
     @IBOutlet weak var termUseTxt: UILabel!
     @IBOutlet weak var skipTxt: UILabel!
     
-    @IBOutlet weak var viewAnime: UIView!
-    @IBOutlet weak var imgViewBg: UIImageView!
     @IBOutlet weak var btnSetFree: UIButton!
+    @IBOutlet weak var freeLableFaive: UILabel!
+    @IBOutlet weak var freeLableFourtin: UILabel!
+    @IBOutlet weak var freeLableThird: UILabel!
+    @IBOutlet weak var freeLableSecond: UILabel!
+    @IBOutlet weak var freeLableFirst: UILabel!
     @IBOutlet weak var subtitleText: UILabel!
-    let pulseLayer = CALayer()
-    let animationView = LottieAnimationView(name: "Animstone4")
-    
-    weak var delegate: StartFreeViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        localize()
         setupAnimation()
+        loadAd()
         setupView()
-        
-        let tapSkip = UITapGestureRecognizer(target: self, action:  #selector(goSkip))
-        skipTxt.addGestureRecognizer(tapSkip)
-        skipTxt.isUserInteractionEnabled = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
         delegate?.showButton()
         self.btnSetFree.isHidden = false
-        setupPulsingAnimation()
         UIView.animate(withDuration: 0.7) {
             self.btnSetFree.backgroundColor = R.Colors.roseBtn
             self.btnSetFree.tintColor = .white
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        loadAd()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -64,19 +60,10 @@ final class StartFreeViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
+        animation!.frame = viewAnimateContainer.bounds
+        setupPulsingAnimation()
         view.setupLayer()
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        animationView.stop()
-    }
-    
-    @objc func goSkip() {
-        self.rewardedInterstitialAd?.present(fromRootViewController: self) {
-            _ = self.rewardedInterstitialAd?.adReward
-        }
-    }
-    
     
     @IBAction func getOffer(_ sender: Any) {
     }
@@ -84,17 +71,53 @@ final class StartFreeViewController: UIViewController {
 
 extension StartFreeViewController {
     private func setupView() {
-        imgViewBg.contentMode = .scaleAspectFill
-        
         btnSetFree.backgroundColor = R.Colors.roseBtn
         btnSetFree.layer.cornerRadius = 25
         
-        let text = "Open up limitless possibilities"
-        let attributeText = NSMutableAttributedString(string: text)
+        let text = subtitleText.text ?? ""
+        let words = text.split(separator: " ")
         
-        attributeText.addAttribute(.foregroundColor, value: UIColor(hexString: "#4C4752"), range: NSRange(location: 0, length: 7))
+        if words.count >= 2 {
+            let atributedWord = words[0]
+            print(atributedWord)
+            let attributedText = NSMutableAttributedString(string: text)
+            attributedText.addAttribute(.foregroundColor, value: R.Colors.darkGrey, range: (text as NSString).range(of: String(atributedWord)))
+            
+            subtitleText.attributedText = attributedText
+        }
         
-        subtitleText.attributedText = attributeText
+        let tapSkip = UITapGestureRecognizer(target: self, action:  #selector(goSkip))
+        skipTxt.addGestureRecognizer(tapSkip)
+        skipTxt.isUserInteractionEnabled = true
+        
+        let tapRestore = UITapGestureRecognizer(target: self, action: #selector(restore))
+        restoreTxt.addGestureRecognizer(tapRestore)
+        restoreTxt.isUserInteractionEnabled = true
+        
+        let tapTermUse = UITapGestureRecognizer(target: self, action: #selector(goTermOfUse))
+        termUseTxt.addGestureRecognizer(tapTermUse)
+        termUseTxt.isUserInteractionEnabled = true
+        
+        let tapPolicy = UITapGestureRecognizer(target: self, action: #selector(goPolicy))
+        privatePolTxt.addGestureRecognizer(tapPolicy)
+        privatePolTxt.isUserInteractionEnabled = true
+    }
+    
+    private func localize() {
+        subtitleText.text = "onb_sub_third".localized
+        subtitleText.adjustsFontSizeToFitWidth = true
+        freeLableFirst.text = "onb_free_first".localized
+        freeLableSecond.text = "onb_free_second".localized
+        freeLableThird.text = "onb_free_third".localized
+        freeLableFourtin.text = "onb_free_fourtin".localized
+        freeLableFaive.text = "onb_free_faive".localized
+        btnSetFree.setTitle("onb_free_btn".localized, for: .normal)
+        restoreTxt.text = "onb_free_restore".localized
+        restoreTxt.adjustsFontSizeToFitWidth = true
+        termUseTxt.text = "onb_free_term_us".localized
+        privatePolTxt.text = "onb_free_private".localized
+        privatePolTxt.adjustsFontSizeToFitWidth = true
+        skipTxt.text = "onb_free_skip".localized
     }
     
     private func setupPulsingAnimation() {
@@ -105,7 +128,7 @@ extension StartFreeViewController {
         view.layer.insertSublayer(pulseLayer, below: btnSetFree.layer)
         
         let animation = CABasicAnimation(keyPath: "transform.scale")
-        animation.duration = 1
+        animation.duration = 0.7
         animation.fromValue = 0.9
         animation.toValue = 1.1
         animation.autoreverses = true
@@ -114,41 +137,60 @@ extension StartFreeViewController {
     }
     
     private func setupAnimation() {
-        animationView.frame = CGRect(x: 0, y: 0, width: 343, height: 280)
-        viewAnime.center = animationView.center
-        animationView.loopMode = .loop
-        animationView.animationSpeed = 1
-        viewAnime.addSubview(animationView)
-        animationView.play()
+        animation = .init(name: "Animstone4")
+        animation?.contentMode = .scaleAspectFit
+        animation?.loopMode = .loop
+        animation?.animationSpeed = 1.5
+        viewAnimateContainer.addSubview(animation!)
+        animation?.play()
     }
     
     private func loadAd() {
-        GADRewardedInterstitialAd.load(withAdUnitID:"ca-app-pub-3940256099942544/6978759866",
-                                       request: GADRequest()) { ad, error in
+        let request = GADRequest()
+        GADInterstitialAd.load(withAdUnitID: R.Strings.KeyAd.interKey,
+                               request: request,
+                               completionHandler: { [self] ad, error in
             if let error = error {
-                return print("Failed to load rewarded interstitial ad with error: \(error.localizedDescription)")
+                loadAd()
+                print("Failed to load interstitial ad with error: \(error.localizedDescription)")
+                return
             }
-            
-            self.rewardedInterstitialAd = ad
-            let options = GADServerSideVerificationOptions()
-            options.customRewardString = "SAMPLE_CUSTOM_DATA_STRING"
-            self.rewardedInterstitialAd!.serverSideVerificationOptions = options
-            self.rewardedInterstitialAd?.fullScreenContentDelegate = self
+            interstitial = ad
+            interstitial?.fullScreenContentDelegate = self
+        }
+        )
+    }
+    
+    @objc func goSkip() {
+        if let interstitial = interstitial {
+            interstitial.present(fromRootViewController: self)
+        }
+    }
+    
+    @objc func restore() {
+    }
+    
+    @objc func goTermOfUse() {
+        guard let url = URL(string: R.Strings.Links.terms) else { return }
+        
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:],
+                                      completionHandler: nil)
+        }
+    }
+    
+    @objc func goPolicy() {
+        guard let url = URL(string: R.Strings.Links.privacy) else { return }
+        
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:],
+                                      completionHandler: nil)
         }
     }
 }
 
 extension StartFreeViewController: GADFullScreenContentDelegate {
-    func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
-        print("Ad did fail to present full screen content.")
-    }
-    
-    func adWillPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        print("Ad will present full screen content.")
-    }
-    
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        print("Ad did dismiss full screen content.")
         dismiss(animated: true)
     }
 }

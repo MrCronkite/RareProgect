@@ -24,9 +24,9 @@
                     <rect key="frame" x="8" y="8" width="144" height="144"/>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Diamond" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IMJ-eU-ezP">
-                    <rect key="frame" x="16" y="16" width="78" height="27"/>
+                    <rect key="frame" x="16" y="16" width="85" height="27"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="78" id="NiC-RF-r0D"/>
+                        <constraint firstAttribute="width" constant="85" id="cS4-FN-EDZ"/>
                         <constraint firstAttribute="height" constant="27" id="uws-wi-Ib7"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
